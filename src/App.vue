@@ -1,42 +1,71 @@
 <template>
   <v-app>
-    <v-app-bar app dense hide-on-scroll="true" elevation="3" color="white">
-      <v-app-bar-nav-icon color="black" class="d-flex d-md-none"></v-app-bar-nav-icon>
-      <!-- <div class="align-center d-none d-md-flex">
-        <v-img
-          alt="Graba tu voz - logo"
-          class="shrink mr-2"
-          contain
-          src="./assets/logo-colorfull.png"
-          transition="scale-transition"
-          width="22"
-        />
-        <h1 class="title dark-text">Graba tu voz</h1>
-      </div> -->
+    <v-app-bar app dense hide-on-scroll elevation="3" color="white">
+      <v-app-bar-nav-icon v-on:click="toggleMobileNav" color="black" class="d-flex d-md-none"></v-app-bar-nav-icon>
       <h1 class="title dark-text">Graba tu voz</h1>
 
       <v-spacer></v-spacer>
       
       <div class="align-center d-none d-md-flex">
-        <router-link class="dark-link mx-2" to="join">Registrarse</router-link>      
-        <router-link class="dark-link mx-2" to="join">Iniciar sesión</router-link>
+        <router-link
+          v-for="link in links"
+          :key="links.indexOf(link)"
+          class="dark-link mx-2"
+          :to="link.route"
+        >{{ link.name }}</router-link>
       </div>
-      <!-- <v-btn outlined class="ma-1 ma-md-2">Participar</v-btn> -->
-      <!-- <v-btn rounded dark class="blue-dark  ma-1 ma-sm-1 ma-md-2">Registrarse</v-btn>
-      <v-btn rounded dark class="blue-light ma-1 ma-md-2">Ingresar</v-btn> -->
     </v-app-bar>
+
+    <v-navigation-drawer v-model="mobileNavOpened" absolute temporary>
+      <v-list-item>        
+        <h1 class="title dark-text">Graba tu voz</h1>
+      </v-list-item>
+      <v-list-item v-for="link in links" :key="links.indexOf(link)" :to="link.route">
+        <v-list-item-content>
+          <v-list-item-title>{{link.name}}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </v-navigation-drawer>
+
     <v-content class="my-4">
       <router-view></router-view>
     </v-content>
     <v-footer color="white" class="justify-center">
-      <p>Desarrollado por José Polo <a href="https://www.github.com/jd45p8">@jd45p8</a></p>
+      <p>
+        Desarrollado por José Polo
+        <a href="https://www.github.com/jd45p8">@jd45p8</a>
+      </p>
     </v-footer>
   </v-app>
 </template>
 
 <script>
 export default {
-  name: "App"
+  name: "App",
+  data: function() {
+    return {
+      mobileNavOpened: false,
+      links: [
+        {
+          name: "Inicio",
+          route: "/"
+        },
+        {
+          name: "Registrarse",
+          route: "/join"
+        },
+        {
+          name: "Iniciar sesión",
+          route: "/join"
+        }
+      ]
+    };
+  },
+  methods: {
+    toggleMobileNav: function() {
+      this.mobileNavOpened = !this.mobileNavOpened;
+    }
+  }
 };
 </script>
 
