@@ -4,8 +4,7 @@
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="5">
         <v-stepper class="elevation-0" v-model="step" vertical>
-          <v-stepper-step :complete="step > 1" color="blue-dark" step="1">Seleccione su usuario</v-stepper-step>
-
+          <v-stepper-step :complete="step > 1" color="blue-dark" step="1">Credenciales</v-stepper-step>
           <v-stepper-content step="1">
             <div class="mb-5">
               <v-text-field
@@ -32,7 +31,7 @@
               ></v-text-field>
             </div>
             <v-btn @click="step = 2" color="blue-dark" class="mb-1" dark rounded>Continuar</v-btn>
-          </v-stepper-content>
+         </v-stepper-content>
 
           <v-stepper-step :complete="step > 2" step="2">Participar en demostración</v-stepper-step>
 
@@ -56,6 +55,7 @@
               ></v-text-field>
             </div>
             <v-btn @click="step = 3" color="blue-dark" class="mb-1" dark rounded>Continuar</v-btn>
+            <v-btn @click="step = 1" class="ml-2" text rounded>Anterior</v-btn>
           </v-stepper-content>
           <v-stepper-step :complete="step > 2" step="3">Política de datos</v-stepper-step>
 
@@ -64,6 +64,7 @@
               <p>Usaremos su información para entrenar el o los modelos que sean necesarios y únicamente intentaremos contactarlo si seleccionó que desea participar en la demostración.</p>
             </div>
             <v-btn @click="step = 1" color="blue-dark" class="mb-1" dark rounded>Finalizar</v-btn>
+            <v-btn @click="step = 2" class="ml-2" text rounded>Anterior</v-btn>
           </v-stepper-content>
         </v-stepper>
       </v-col>
@@ -84,7 +85,7 @@ export default {
       state: "",
       province: "",
       demo: false,
-      step: 2,
+      step: 1,
       rules: {
         required: value => !!value || "Requerido",
         counter: value => {

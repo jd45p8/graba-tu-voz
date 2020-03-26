@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app dense hide-on-scroll elevation="3" color="white">
-      <v-app-bar-nav-icon v-on:click="toggleMobileNav" color="black" class="d-flex d-md-none"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon color="black" v-on:click="toggleMobileNav" class="d-flex d-md-none"></v-app-bar-nav-icon>
       <h1 class="title dark-text">Graba tu voz</h1>
 
       <v-spacer></v-spacer>
@@ -56,7 +56,7 @@ export default {
         },
         {
           name: "Iniciar sesión",
-          route: "/join"
+          route: "/login"
         }
       ]
     };
