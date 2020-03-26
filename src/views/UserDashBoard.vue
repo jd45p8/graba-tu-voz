@@ -1,6 +1,6 @@
 <template>
   <div class="userdashboard">
-
+    Hola
   </div>
 </template>
 
@@ -9,7 +9,7 @@ export default {
   nane: "UserDashBoard",
   data: function() {
     return {
-      
+
     }
   }
 }

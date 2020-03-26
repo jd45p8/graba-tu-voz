@@ -1,7 +1,7 @@
 <template>
-  <div class="login d-flex justify-center">
+  <v-col class="login d-flex justify-center">
     <v-row align="center" justify="center">
-      <v-col cols="11" sm="6" md="4" lg="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-card class="px-6 py-5 elevation'0">
           <h1 class="dark-text text-center header font-weight-light">Iniciar sesión</h1>
           <v-text-field
@@ -24,7 +24,7 @@
         </v-card>
       </v-col>
     </v-row>
-  </div>
+  </v-col>
 </template>
 
 <script>

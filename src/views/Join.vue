@@ -1,5 +1,5 @@
 <template>
-  <div class="join">
+  <v-col class="join">
     <h1 class="dark-text text-center header font-weight-light">Formulario de registro</h1>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="5">
@@ -12,11 +12,6 @@
                 :rules="[rules.required, rules.counter, rules.email]"
                 label="Correo electrónico"
               ></v-text-field>
-              <!-- <v-text-field
-                v-model="username"
-                :rules="[rules.required, rules.counter]"
-                label="Usuario"
-              ></v-text-field>-->
               <v-text-field
                 v-model="password"
                 :rules="[rules.required, rules.min, rules.counter]"
@@ -31,7 +26,7 @@
               ></v-text-field>
             </div>
             <v-btn @click="step = 2" color="blue-dark" class="mb-1" dark rounded>Continuar</v-btn>
-         </v-stepper-content>
+          </v-stepper-content>
 
           <v-stepper-step :complete="step > 2" step="2">Participar en demostración</v-stepper-step>
 
@@ -44,8 +39,20 @@
                 hide-details
                 label="¿Estaría dispuesto a participar en una demostración de los proyectos que se desarrollen a partir de este conjunto de datos?"
               ></v-switch>
-              <v-text-field v-if="demo" v-model="country" type="country" :rules="[rules.required]" label="País"></v-text-field>
-              <v-text-field v-if="demo" v-model="state" type="state" :rules="[rules.required]" label="Estado"></v-text-field>
+              <v-text-field
+                v-if="demo"
+                v-model="country"
+                type="country"
+                :rules="[rules.required]"
+                label="País"
+              ></v-text-field>
+              <v-text-field
+                v-if="demo"
+                v-model="state"
+                type="state"
+                :rules="[rules.required]"
+                label="Estado"
+              ></v-text-field>
               <v-text-field
                 v-if="demo"
                 v-model="province"
@@ -69,7 +76,7 @@
         </v-stepper>
       </v-col>
     </v-row>
-  </div>
+  </v-col>
 </template>
 
 <script>
