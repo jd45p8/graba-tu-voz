@@ -2,24 +2,24 @@
   <v-col class="login d-flex justify-center">
     <v-row align="center" justify="center">
       <v-col cols="12" sm="6" md="4" lg="3">
-        <v-card class="px-6 py-5 elevation'0">
-          <h1 class="dark-text text-center header font-weight-light">Iniciar sesión</h1>
+        <v-card class="px-6 py-7 elevation-0" outlined>
+          <h1 class="dark-text text-center header font-weight-light mb-7">Iniciar sesión</h1>
           <v-text-field
             v-model="email"
             :rules="[rules.required, rules.counter, rules.email]"
             label="Correo electrónico"
-            full-width
+            outlined
           ></v-text-field>
           <v-text-field
             v-model="password"
             :rules="[rules.required, rules.min, rules.counter]"
             label="Contraseña"
             type="password"
-            full-width
+            outlined
           ></v-text-field>
           <v-row justify="center" class="mt-3">
-            <v-btn color="blue-dark" dark rounded to="/userdashboard">Ingresar</v-btn>
-            <v-btn class="ml-2" rounded text to="/join">Registrarse</v-btn>
+            <v-btn color="blue-dark" class="elevation-0" dark to="/userdashboard">Ingresar</v-btn>
+            <v-btn class="ml-2 blue-dark-text" text to="/join">Registrarse</v-btn>
           </v-row>
         </v-card>
       </v-col>

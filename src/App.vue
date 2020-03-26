@@ -1,11 +1,11 @@
 <template>
   <v-app>
     <v-app-bar app dense hide-on-scroll elevation="3" color="white">
-      <v-app-bar-nav-icon color="black" v-on:click="toggleMobileNav" class="d-flex d-md-none"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon v-on:click="toggleMobileNav" class="d-flex d-md-none dark-text"></v-app-bar-nav-icon>
       <h1 class="title dark-text">Graba tu voz</h1>
 
       <v-spacer></v-spacer>
-      
+
       <div class="align-center d-none d-md-flex">
         <router-link
           v-for="link in links"
@@ -17,14 +17,18 @@
     </v-app-bar>
 
     <v-navigation-drawer v-model="mobileNavOpened" absolute temporary>
-      <v-list-item>        
-        <h1 class="title dark-text">Graba tu voz</h1>
-      </v-list-item>
-      <v-list-item v-for="link in links" :key="links.indexOf(link)" :to="link.route">
-        <v-list-item-content>
-          <v-list-item-title>{{link.name}}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+      <v-list shaped>
+        <v-subheader>
+          <h1 class="title dark-text">Graba tu voz</h1>
+        </v-subheader>
+        <v-list-item-group class="blue-dark-text">
+          <v-list-item v-for="link in links" :key="links.indexOf(link)" :to="link.route">
+            <v-list-item-content>
+              <v-list-item-title>{{link.name}}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
     </v-navigation-drawer>
 
     <v-content class="my-4">
