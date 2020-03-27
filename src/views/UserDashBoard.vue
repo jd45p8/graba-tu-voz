@@ -1,5 +1,6 @@
-.<template>
+<template>
   <div class="userdashboard">
+    <record-modal :open="showRecordModal" :text="textToRecord" @closeModal="closeRecordModal"/>
     <v-col class="mt-n5">
       <v-row>
         <template v-for="i in 10">
@@ -22,17 +23,17 @@
                       <v-list-item-content>
                         <div class="dark-text subtitle-2 font-weight-regular">Grabación {{i}}</div>
                       </v-list-item-content>
-                      <v-btn color="grey" fab small text>
+                      <v-btn color="grey darken-1" fab small text>
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
-                      <v-btn color="grey" fab small text>
+                      <v-btn color="grey darken-1" fab small text>
                         <v-icon>mdi-play</v-icon>
                       </v-btn>
                     </v-list-item>
                   </v-card>
                   <v-row justify="center">
-                    <v-btn color="blue-dark" dark fab depressed>
-                      <v-icon>mdi-microphone-outline</v-icon>
+                    <v-btn @click="openRecordModal((i-1).toString())" color="blue-dark" dark fab depressed>
+                      <v-icon>mdi-plus</v-icon>
                     </v-btn>
                   </v-row>
                 </v-expansion-panel-content>
@@ -46,11 +47,28 @@
 </template>
 
 <script>
+import RecordModal from '../components/RecordModal.vue'
+
 export default {
   nane: "UserDashBoard",
   data: function() {
-    return {}
+    return {
+      showRecordModal: true,
+      textToRecord: ''
+    }
   },
-  methods: {}
+  methods: {
+    openRecordModal: function (text) {
+      this.textToRecord = text
+      this.showRecordModal = true
+    },
+    closeRecordModal: function () {
+      this.showRecordModal = false
+      this.textToRecord = ''
+    }
+  },
+  components: {
+    RecordModal
+  }
 };
 </script>
