@@ -44,35 +44,33 @@ export default {
       this.$emit("closeModal");
     },
     startRecording: async function() {
-      const self = this;
-
-      var handleSuccess = function(stream) {
+      var handleSuccess = stream => {
         const options = { mimeType: "video/webm;codecs=vp9" };
-        const chunks = [];
+        let chunks = [];
         const recorder = new MediaRecorder(stream, options);
 
-        self.recording = true;
-        self.shouldStop = false;
+        this.recording = true;
+        this.shouldStop = false;
 
-        recorder.ondataavailable = function(e) {
+        recorder.ondataavailable = e => {
           if (e.data.size > 0) {
             chunks.push(e.data);
           }
 
           console.log(e.data);
 
-          if (self.shouldStop && self.recording) {
+          if (this.shouldStop && this.recording) {
             recorder.stop();
-            self.recording = false;
-            self.finishedRecording = true;
-            self.shouldStop = false;
+            this.recording = false;
+            this.finishedRecording = true;
+            this.shouldStop = false;
           }
         };
 
-        recorder.onstop = function(e) {
+        recorder.onstop = e => {
           console.log("Finished");
         };
-
+        
         recorder.start();
       };
 
@@ -89,7 +87,6 @@ export default {
       } else if (!this.shouldStop) {
         this.shouldStop = true;
       }
-      console.log(`${this.recording}  ${this.shouldStop}`)
     },
     checkPermision: function() {
       const self = this;

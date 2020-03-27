@@ -38,6 +38,9 @@ const routes = [
 
 const router = new VueRouter({
   mode: "history",
+  routes: [
+    { path: '*', component: '404' }
+  ],
   base: process.env.BASE_URL,
   routes
 });
