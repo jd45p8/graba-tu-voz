@@ -2,12 +2,13 @@
   <v-col class="login d-flex justify-center">
     <v-row align="center" justify="center">
       <v-col cols="12" sm="6" md="4" lg="3">
-        <v-card class="px-6 py-7 elevation-0" outlined>
+        <v-card class="px-6 py-7" depressed outlined>
           <h1 class="dark-text text-center header font-weight-light mb-7">Iniciar sesión</h1>
           <v-text-field
             v-model="email"
             :rules="[rules.required, rules.counter, rules.email]"
             label="Correo electrónico"
+            type="email"
             outlined
           ></v-text-field>
           <v-text-field
@@ -18,7 +19,7 @@
             outlined
           ></v-text-field>
           <v-row justify="center" class="mt-3">
-            <v-btn color="blue-dark" class="elevation-0" dark to="/userdashboard">Ingresar</v-btn>
+            <v-btn color="blue-dark" depressed dark to="/userdashboard">Ingresar</v-btn>
             <v-btn class="ml-2 blue-dark-text" text to="/join">Registrarse</v-btn>
           </v-row>
         </v-card>
