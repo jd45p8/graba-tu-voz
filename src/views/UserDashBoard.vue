@@ -53,7 +53,7 @@ export default {
   nane: "UserDashBoard",
   data: function() {
     return {
-      showRecordModal: true,
+      showRecordModal: false,
       textToRecord: ''
     }
   },

@@ -6,7 +6,7 @@
         <v-card-text class="subtitle-1">Debes grabar tu voz diciendo: "{{text}}"</v-card-text>
 
         <v-btn
-          color="blue-dark"
+          :class="{'blue-dark':!recording, 'red':recording}"
           v-if="!finishedRecording"
           dark
           fab
@@ -18,6 +18,8 @@
           <v-icon v-if="!recording">mdi-microphone</v-icon>
           <v-icon v-if="recording">mdi-stop</v-icon>
         </v-btn>
+
+        <audio v-if="finishedRecording" class="mx-auto" :src="audioSrc" controls></audio>
 
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -36,17 +38,21 @@ export default {
     return {
       recording: false,
       shouldStop: false,
-      finishedRecording: false
+      finishedRecording: false,
+      audioSrc: '' 
     };
   },
   methods: {
     closeModal: function() {
       this.$emit("closeModal");
+      this.recording = false;
+      this.shouldStop = false;
+      this.finishedRecording = false;
     },
     startRecording: async function() {
       var handleSuccess = stream => {
-        const options = { mimeType: "video/webm;codecs=vp9" };
-        let chunks = [];
+        const options = { sampleSize:32, chanelcount: 1, samplerate:"44100", mimeType: "video/webm;codecs=vp9" };
+        const chunks = [];
         const recorder = new MediaRecorder(stream, options);
 
         this.recording = true;
@@ -57,8 +63,6 @@ export default {
             chunks.push(e.data);
           }
 
-          console.log(e.data);
-
           if (this.shouldStop && this.recording) {
             recorder.stop();
             this.recording = false;
@@ -68,10 +72,10 @@ export default {
         };
 
         recorder.onstop = e => {
-          console.log("Finished");
+          this.audioSrc = URL.createObjectURL(new Blob(chunks));
         };
         
-        recorder.start();
+        recorder.start(100);
       };
 
       if (!this.recording) {
