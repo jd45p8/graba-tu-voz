@@ -16,7 +16,7 @@
       </div>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="mobileNavOpened" absolute temporary>
+    <v-navigation-drawer app v-model="mobileNavOpened" temporary>
       <v-list shaped>
         <v-subheader>
           <h1 class="title dark-text">Graba tu voz</h1>

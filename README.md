@@ -1,4 +1,4 @@
-# speechrecorderweb
+# grabatuvoz
 
 ## Project setup
 ```
@@ -13,6 +13,11 @@ npm run serve
 ### Compiles and minifies for production
 ```
 npm run build
+```
+
+### Runs static server
+```
+npm start
 ```
 
 ### Lints and fixes files

@@ -17,7 +17,7 @@
                   <v-card v-for="j in 4" :key="j" outlined :class="{'my-2': j > 1}">
                     <v-row no-gutters align="center" class="px-3">
                       <v-col cols="auto">
-                        <h1 class="dark-text subtitle-2 font-weight-regular">G {{j}}</h1>
+                        <span class="dark-text subtitle-2 font-weight-regular">G {{j}}</span>
                       </v-col>
                       <v-col>
                         <audio-player :id="`player-${i}-${j}`" src=""></audio-player>                        

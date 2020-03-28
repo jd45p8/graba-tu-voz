@@ -1,6 +1,5 @@
 <template>
   <div class="audioplayer">
-    <audio :id="id" :src="src" preload="auto" hidden></audio>
     <v-slider
       v-model="sliderPosition"
       hide-details
@@ -12,7 +11,7 @@
       @start="player.pause()"
     >
       <template v-slot:prepend>
-        <v-btn @click="togglePlay" color="grey darken-1" fab small text>
+        <v-btn @click="togglePlay" color="grey darken-1" fab small text :loading="loading">
           <v-icon>{{isPlaying ? 'mdi-pause' : 'mdi-play'}}</v-icon>
         </v-btn>
       </template>
@@ -33,14 +32,12 @@ export default {
       duration: 0,
       textTime: "0:00",
       sliderPosition: 0,
-      maxSlider: 1000
+      maxSlider: 1000,
+      player: document.createElement('audio'),
+      loading: false
     };
   },
   props: {
-    id: {
-      required: true,
-      type: String
-    },
     src: {
       required: true,
       type: String
@@ -78,42 +75,58 @@ export default {
       }
     }
   },
-  computed: {
-    player: function() {
-      return document.getElementById(this.id);
-    }
-  },
   watch: {
     currentTime: function() {
       this.updateTextTime();
     },
     duration: function() {
       this.updateTextTime();
+    },
+    src: async function() {
+      // Actualiza la duración de la grabación
+      this.loading = true;
+      this.player.src = this.src;
+      let tempPlayer = document.createElement('audio');
+      tempPlayer.preload = 'auto';
+      tempPlayer.muted = true;
+      tempPlayer.src = this.src;
+      tempPlayer.muted = true;
+      tempPlayer.ondurationchange = e =>{
+        if (tempPlayer.duration != Infinity) {
+          tempPlayer.ondurationchange = null;
+          tempPlayer.pause();
+          this.duration = tempPlayer.duration;
+          this.loading = false;
+          return;
+        }
+      }
+      tempPlayer.play();
     }
   },
   mounted: function() {
     this.player.volume = 1;
+    this.player.preload = 'auto';
     this.duration = this.player.duration;
 
-    this.player.addEventListener("play", e => {
+    this.player.onplay = e => {
       this.isPlaying = true;
-    });
+    };
 
-    this.player.addEventListener("ended", e => {
+    this.player.onended = e => {
       this.isPlaying = false;
-    });
+    };
 
-    this.player.addEventListener("pause", e => {
+    this.player.onpause = e => {
       this.isPlaying = false;
-    });
+    };
 
-    this.player.addEventListener("timeupdate", e => {
+    this.player.ontimeupdate = e => {
       this.currentTime = this.player.currentTime;
-    });
+    };
 
-    this.player.addEventListener("durationchange", e => {
+    this.player.ondurationchange = e => {
       this.duration = this.player.duration;
-    });
+    };
   }
 }
 </script>
