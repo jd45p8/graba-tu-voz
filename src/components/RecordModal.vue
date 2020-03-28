@@ -18,13 +18,7 @@
           <v-icon>{{recording? 'mdi-stop':'mdi-microphone'}}</v-icon>
         </v-btn>
 
-        <audio
-          v-if="finishedRecording"
-          class="mx-auto"
-          :src="audioSrc"
-          controls
-          controlslist="nodownload"
-        ></audio>
+        <audio-player id="recorder-player" v-if="finishedRecording" class="px-7" :src="audioSrc" ></audio-player>
 
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -37,6 +31,8 @@
 </template>
 
 <script>
+import AudioPlayer from "../components/AudioPlayer.vue";
+
 export default {
   name: "RecordModal",
   data: function() {
@@ -133,12 +129,9 @@ export default {
       type: String,
       required: true
     }
+  },
+  components: {
+    AudioPlayer
   }
 };
 </script>
-
-<style lang="scss" scoped>
-audio {
-  width: 90%;
-}
-</style>

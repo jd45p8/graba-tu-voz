@@ -1,6 +1,6 @@
 <template>
   <div class="audioplayer">
-    <audio :id="id" :src="src" controls preload="auto" hidden></audio>
+    <audio :id="id" :src="src" preload="auto" hidden></audio>
     <v-slider
       v-model="sliderPosition"
       hide-details
@@ -69,7 +69,7 @@ export default {
       let maxSeg = Math.floor(this.duration % 60);
       let max = `${maxMin}:${maxSeg > 9 ? maxSeg : `0${maxSeg}`}`;
 
-      if (this.duration > 0) {
+      if (this.duration > 0 && this.duration != Infinity) {
         this.sliderPosition =
           this.maxSlider * (this.currentTime / this.duration);
         this.textTime = `${current} / ${max}`;
@@ -115,5 +115,5 @@ export default {
       this.duration = this.player.duration;
     });
   }
-};
+}
 </script>

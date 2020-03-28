@@ -15,12 +15,19 @@
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-card v-for="j in 4" :key="j" outlined :class="{'my-2': j > 1}">
-                    <v-list-item>
-                      <v-list-item-content>
-                        <div class="dark-text subtitle-2 font-weight-regular">Grabación {{i}}</div>
-                      </v-list-item-content>
-                      <audio-player :id="`player-${i}-${j}`" src=""></audio-player>
-                    </v-list-item>
+                    <v-row no-gutters align="center" class="px-3">
+                      <v-col cols="auto">
+                        <h1 class="dark-text subtitle-2 font-weight-regular">G {{j}}</h1>
+                      </v-col>
+                      <v-col>
+                        <audio-player :id="`player-${i}-${j}`" src=""></audio-player>                        
+                      </v-col>
+                      <v-col cols="auto">
+                        <v-btn color="grey darken-1" fab small text>
+                          <v-icon>mdi-delete</v-icon>
+                        </v-btn>
+                      </v-col>
+                    </v-row>
                   </v-card>
                   <v-row justify="center">
                     <v-btn
@@ -66,7 +73,7 @@ export default {
     }
   },
   components: {
-    RecordModal, 
+    RecordModal,
     AudioPlayer
   }
 };
