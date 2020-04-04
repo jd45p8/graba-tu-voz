@@ -30,6 +30,8 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
+    
+    <notifications></notifications>
 
     <v-content class="my-4">
       <router-view></router-view>
@@ -44,6 +46,8 @@
 </template>
 
 <script>
+import Notifications from './components/Notifications';
+
 export default {
   name: "App",
   data: function() {
@@ -55,7 +59,7 @@ export default {
           route: "/"
         },
         {
-          name: "Registrarse",
+          name: "Unirse",
           route: "/join"
         },
         {
@@ -69,6 +73,9 @@ export default {
     toggleMobileNav: function() {
       this.mobileNavOpened = !this.mobileNavOpened;
     }
+  },
+  components: {
+    Notifications
   }
 };
 </script>

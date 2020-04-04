@@ -33,8 +33,8 @@
         <v-col cols="12" sm="6" md="4" class="flex-wrap">
           <v-card dark class="blue-dark pa-3 d-flex flex-column" height="100%">
             <div class="my-auto">
-              <h1 class="display-2 text-center">Regístrate</h1>
-              <h2 class="font-weight-light subtitle-1 mt-2">Para identificar una persona por su voz, se necesita separar las voces de distintos individuos, por lo que necesitamos que se registre para participar.</h2>
+              <h1 class="display-2 text-center">Únete</h1>
+              <h2 class="font-weight-light subtitle-1 mt-2">Para identificar una persona por su voz, se necesita separar las voces de distintos individuos, por lo que necesitamos tomar algunos de tus datos para participar.</h2>
             </div>
           </v-card>
         </v-col>

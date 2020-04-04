@@ -19,7 +19,7 @@
             outlined
           ></v-text-field>
           <v-row justify="center" class="mt-3">
-            <v-btn color="blue-dark" depressed dark to="/userdashboard">Ingresar</v-btn>
+            <v-btn color="blue-dark" depressed dark @click="login">Ingresar</v-btn>
             <v-btn class="ml-2 blue-dark-text" text to="/join">Registrarse</v-btn>
           </v-row>
         </v-card>
@@ -29,6 +29,9 @@
 </template>
 
 <script>
+const axios = require("axios");
+import { notificationBus } from "../main";
+
 export default {
   name: "Join",
   data: function() {
@@ -55,6 +58,38 @@ export default {
         }
       }
     };
+  },
+  methods: {
+    verifyEmail: function() {
+      let email = this.email;
+      return (
+        this.rules.counter(email) === true && this.rules.email(email) === true
+      );
+    },
+    verifyPassword: function() {
+      let password = this.password;
+      return (
+        this.rules.min(password) === true &&
+        this.rules.counter(password) === true
+      );
+    },
+    login: async function() {
+      const rules = this.rules;
+      if (!this.verifyEmail() || !this.verifyPassword()) {
+        return notificationBus.$emit("WARNING", "Verifique sus credenciales.");
+      }
+      try {
+        let response = await axios.post(`${window["URL_API"]}/login`);
+        localStorage.setItem("grabatuvoz-token", response.data.token);
+        this.$router.push("userdashboard");
+      } catch (error) {
+        if (error.response.status >= 500) {
+          notificationBus.$emit("ERROR", error.response.data.message);
+        } else {
+          notificationBus.$emit("WARNING", error.response.data.message);
+        }
+      }
+    }
   }
 };
 </script>
