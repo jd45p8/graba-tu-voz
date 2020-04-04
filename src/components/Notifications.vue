@@ -5,10 +5,10 @@
       :key="messages.indexOf(m)"
       v-model="m.show"
       :timeout="m.timeout"
-      color="dark"
+      left
     >{{m.text}}
     <v-btn @click="m.show = false" fab text small dark>
-      <v-icon :color="m.color">mdi-close</v-icon>
+      <v-icon >mdi-close</v-icon>
     </v-btn>
     </v-snackbar>
   </div>
@@ -24,46 +24,23 @@ export default {
       messages: []
     };
   },
+  methods: {
+    pushSnackbar: function(m) {
+      let message = {
+        show: true,
+        text: m,
+        timeout: 3000,
+      };
+      this.messages.push(message);
+      setTimeout(() => {
+        this.messages.splice(this.messages.indexOf(message), 1);
+      }, 3000);
+    }
+  },
   mounted() {
-    notificationBus.$on("ERROR", e => {
-      let message = {
-        show: true,
-        text: e,
-        timeout: 3000,
-        color: 'error'
-      };
-      this.messages.push(message);
-      setTimeout(() => {
-        this.messages.splice(this.messages.indexOf(message), 1);
-      }, 3000);
-    });
-
-    notificationBus.$on("WARNING", w => {
-      let message = {
-        show: true,
-        text: w,
-        timeout: 3000,
-        color: 'warning'
-      };
-      this.messages.push(message);
-      setTimeout(() => {
-        this.messages.splice(this.messages.indexOf(message), 1);
-      }, 3000);
-    });
-
-    notificationBus.$on("SUCCESS", w => {
-      let message = {
-        show: true,
-        text: w,
-        timeout: 3000,
-        color: 'success'
-      };
-      this.messages.push(message);
-      setTimeout(() => {
-        this.messages.splice(this.messages.indexOf(message), 1);
-      }, 3000);
-    });
-
+    notificationBus.$on("ERROR", this.pushSnackbar);
+    notificationBus.$on("WARNING", this.pushSnackbar);
+    notificationBus.$on("SUCCESS", this.pushSnackbar);
   }
 };
 </script>

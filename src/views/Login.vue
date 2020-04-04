@@ -41,9 +41,6 @@ export default {
       rules: {
         required: value => !!value || "Requerido",
         counter: value => {
-          if (value == undefined) {
-            return true;
-          }
           return value.length <= 50 || "Maximo 50 caracteres";
         },
         email: value => {
@@ -51,9 +48,6 @@ export default {
           return pattern.test(value) || "Correo inválido";
         },
         min: value => {
-          if (value == undefined) {
-            return true;
-          }
           return value.length >= 8 || "8 caracteres mínimo";
         }
       }
@@ -79,7 +73,10 @@ export default {
         return notificationBus.$emit("WARNING", "Verifique sus credenciales.");
       }
       try {
-        let response = await axios.post(`${window["URL_API"]}/login`);
+        let response = await axios.post(`${window["URL_API"]}/login`, {
+          email: this.email,
+          password: this.password
+        });
         localStorage.setItem("grabatuvoz-token", response.data.token);
         this.$router.push("userdashboard");
       } catch (error) {
