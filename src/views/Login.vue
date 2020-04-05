@@ -2,26 +2,31 @@
   <v-col class="login d-flex justify-center">
     <v-row align="center" justify="center">
       <v-col cols="12" sm="6" md="4" lg="3">
-        <v-card class="px-6 py-7" depressed outlined>
-          <h1 class="dark-text text-center header font-weight-light mb-7">Iniciar sesión</h1>
-          <v-text-field
-            v-model="email"
-            :rules="[rules.required, rules.counter, rules.email]"
-            label="Correo electrónico"
-            type="email"
-            outlined
-          ></v-text-field>
-          <v-text-field
-            v-model="password"
-            :rules="[rules.required, rules.min, rules.counter]"
-            label="Contraseña"
-            type="password"
-            outlined
-          ></v-text-field>
-          <v-row justify="center" class="mt-3">
-            <v-btn color="blue-dark" depressed dark @click="login">Ingresar</v-btn>
-            <v-btn class="ml-2 blue-dark-text" text to="/join">Registrarse</v-btn>
-          </v-row>
+        <v-card depressed outlined :loading="logginIn">
+          <template slot="progress">
+            <v-progress-linear indeterminate color="blue-dark"></v-progress-linear>
+          </template>
+          <div class="mx-6 my-7">
+            <h1 class="dark-text text-center header font-weight-light mb-7">Iniciar sesión</h1>
+            <v-text-field
+              v-model="email"
+              :rules="[rules.required, rules.counter, rules.email]"
+              label="Correo electrónico"
+              type="email"
+              outlined
+            ></v-text-field>
+            <v-text-field
+              v-model="password"
+              :rules="[rules.required, rules.min, rules.counter]"
+              label="Contraseña"
+              type="password"
+              outlined
+            ></v-text-field>
+            <v-row justify="center" class="mt-3">
+              <v-btn color="blue-dark" :dark="!logginIn" depressed @click="login" :disabled="logginIn">Ingresar</v-btn>
+              <v-btn class="ml-2 blue-dark-text" text to="/join">Registrarse</v-btn>
+            </v-row>
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -38,6 +43,7 @@ export default {
     return {
       email: "",
       password: "",
+      logginIn: false,
       rules: {
         required: value => !!value || "Requerido",
         counter: value => {
@@ -72,12 +78,15 @@ export default {
       if (!this.verifyEmail() || !this.verifyPassword()) {
         return notificationBus.$emit("WARNING", "Verifique sus credenciales.");
       }
+      this.logginIn = true;
       try {
         let response = await axios.post(`${window["URL_API"]}/login`, {
           email: this.email,
           password: this.password
         });
-        localStorage.setItem("grabatuvoz-token", response.data.token);
+        localStorage.token = response.data.token;
+        localStorage.email = this.email;
+        this.$emit("UPDATENAV");
         this.$router.push("userdashboard");
       } catch (error) {
         if (error.response.status >= 500) {
@@ -86,6 +95,7 @@ export default {
           notificationBus.$emit("WARNING", error.response.data.message);
         }
       }
+      this.logginIn = false;
     }
   }
 };

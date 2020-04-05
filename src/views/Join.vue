@@ -3,7 +3,7 @@
     <h1 class="dark-text text-center header font-weight-light">Formulario de registro</h1>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="5">
-        <v-stepper depressed v-model="step" vertical>
+        <v-stepper class="elevation-0" v-model="step" vertical>
           <v-stepper-step :complete="step > 1" color="blue-dark" step="1">Credenciales</v-stepper-step>
           <v-stepper-content step="1">
             <div class="mb-2 pt-1">
@@ -76,7 +76,7 @@
             <div class="mb-5">
               <p>Presionando el botón aceptar a continuación finalizará su registro y acepta que usemos la infomración que suministre en esta plataforma para entrenar el o los modelos que sean necesarios, y únicamente intentaremos contactarlo si seleccionó que desea participar en la demostración.</p>
             </div>
-            <v-btn @click="nextStep" color="blue-dark" class="mb-1" depressed dark>Aceptar</v-btn>
+            <v-btn @click="nextStep" :loading="sending" color="blue-dark" class="mb-1" depressed dark>Aceptar</v-btn>
             <v-btn @click="step = 2" class="ml-2" text>Anterior</v-btn>
           </v-stepper-content>
         </v-stepper>
@@ -93,6 +93,7 @@ export default {
   name: "Join",
   data: function() {
     return {
+      sending: false,
       form: {
         email: "",
         password: "",
@@ -169,9 +170,10 @@ export default {
                 contact: form.contact
               };
             }
-
+            this.sending = true;
             let response = await axios.post(`${window["URL_API"]}/user`, form);
             notificationBus.$emit("SUCCESS", response.data.message);
+            this.sending = false;
             this.$router.push("login");
           } catch (error) {
             if (error.response.status >= 500) {

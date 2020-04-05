@@ -12,7 +12,7 @@
           :key="links.indexOf(link)"
           class="dark-link mx-2"
           :to="link.route"
-        >{{ link.name }}</router-link>
+        >{{ link.shownName }}</router-link>
       </div>
     </v-app-bar>
 
@@ -24,17 +24,17 @@
         <v-list-item-group class="blue-dark-text">
           <v-list-item v-for="link in links" :key="links.indexOf(link)" :to="link.route">
             <v-list-item-content>
-              <v-list-item-title>{{link.name}}</v-list-item-title>
+              <v-list-item-title>{{link.shownName}}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    
+
     <notifications></notifications>
 
     <v-content class="my-4">
-      <router-view></router-view>
+      <router-view v-on:UPDATENAV="updateLinks"></router-view>
     </v-content>
     <v-footer color="white" class="justify-center">
       <p>
@@ -46,36 +46,48 @@
 </template>
 
 <script>
-import Notifications from './components/Notifications';
+import Notifications from "./components/Notifications";
 
 export default {
   name: "App",
   data: function() {
     return {
       mobileNavOpened: false,
-      links: [
-        {
-          name: "Inicio",
-          route: "/"
-        },
-        {
-          name: "Unirse",
-          route: "/join"
-        },
-        {
-          name: "Iniciar sesión",
-          route: "/login"
-        }
-      ]
+      links: []
     };
   },
   methods: {
     toggleMobileNav: function() {
       this.mobileNavOpened = !this.mobileNavOpened;
+    },
+    updateLinks: function() {
+      this.links = [];
+      if (localStorage.token) {
+        this.$router.options.routes.forEach(r => {
+          if (r.meta && (r.meta.requiresAuth || !r.meta.guest)) {
+            this.links.push({
+              shownName: r.meta.shownName,
+              route: r.path
+            });
+          }
+        });
+      } else {
+        this.$router.options.routes.forEach(r => {
+          if (r.meta && (r.meta.guest || !r.meta.requiresAuth)) {
+            this.links.push({
+              shownName: r.meta.shownName,
+              route: r.path
+            });
+          }
+        });
+      }
     }
   },
   components: {
     Notifications
+  },
+  mounted() {
+    this.updateLinks();
   }
 };
 </script>
