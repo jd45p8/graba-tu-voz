@@ -1,7 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-import { notificationBus } from "../main"
+import { notificationBus } from "../main";
+const axios = require("axios");
 
 Vue.use(VueRouter);
 
@@ -48,10 +49,10 @@ const routes = [
       shownName: "Cerrar sesión"
     },
     beforeEnter: async function (to, from, next) {
-      const axios = require("axios");
       try {
         let response = await axios({
-          method: "post", url: `${window["URL_API"]}/logout`,
+          method: "post",
+          url: `${window["URL_API"]}/logout`,
           headers: {
             Authorization: `Bearer ${localStorage.token}`
           }
@@ -67,6 +68,7 @@ const routes = [
 
       localStorage.removeItem("token");
       localStorage.removeItem("email");
+      from.matched[0].instances.default.$emit("UPDATENAV");
       next({
         name: "Login"
       });
@@ -74,7 +76,16 @@ const routes = [
   },
   {
     path: "*",
-    redirect: {name:'Home'}
+    beforeEnter: function (to, from, next) {
+      next({
+        name: 'Home'
+      });
+      if (!from.matched.some(r => from.path == r.path)) {
+        setTimeout(() => {
+          notificationBus.$emit("WARNING", "Sitio no encontrado.");
+        }, 0);
+      }
+    }
   }
 ];
 
