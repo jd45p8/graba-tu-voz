@@ -74,26 +74,6 @@ export default {
         this.textTime = "0:00 / 0:00";
       }
     },
-    updatePlayer: function() {
-      // Actualiza la duración de la grabación
-      this.loading = true;
-      this.player.src = this.src;
-      let tempPlayer = document.createElement("audio");
-      tempPlayer.preload = "auto";
-      tempPlayer.muted = true;
-      tempPlayer.src = this.src;
-      tempPlayer.muted = true;
-      tempPlayer.ondurationchange = e => {
-        if (tempPlayer.duration != Infinity) {
-          tempPlayer.ondurationchange = null;
-          tempPlayer.pause();
-          this.duration = tempPlayer.duration;
-          this.loading = false;
-          return;
-        }
-      };
-      tempPlayer.play();
-    }
   },
   watch: {
     currentTime: function() {
@@ -103,16 +83,14 @@ export default {
       this.updateTextTime();
     },
     src: function() {
-      this.updatePlayer();
+      this.player.src = this.src;
     }
   },
   mounted: function() {
     this.player.volume = 1;
     this.player.preload = "auto";
-    if (this.src != "") {
-      this.updatePlayer();
-    }
-
+    this.player.src = this.src;
+    
     this.player.onplay = e => {
       this.isPlaying = true;
     };

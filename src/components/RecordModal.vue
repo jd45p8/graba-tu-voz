@@ -40,6 +40,7 @@ import AudioPlayer from "../components/AudioPlayer.vue";
 import { notificationBus } from "../main";
 
 const axios = require("axios");
+const RecordRTC = require("recordrtc");
 
 export default {
   name: "RecordModal",
@@ -50,11 +51,9 @@ export default {
       audioSrc: "",
       audioBlob: null,
       uploading: false,
-      recordingOptions: {
-        sampleSize: 32,
-        chanelcount: 1,
-        samplerate: "44100",
-        mimeType: "video/webm;codecs=vp9"
+      audioConstraints: {
+        sampleSize: 24,
+        chanelCount: 1
       }
     };
   },
@@ -66,40 +65,31 @@ export default {
       this.audioSrc = "";
     },
     startRecording: async function() {
-      var handleSuccess = stream => {
-        const chunks = [];
-        const recorder = new MediaRecorder(stream, this.recordingOptions);
+      var handleSuccess = async stream => {
+        const recorder = new RecordRTC(stream, {
+          type: "audio",
+          mimeType: "audio/wav",
+          recorderType: RecordRTC.StereoAudioRecorder,
+          timeSlice: 100,
+          bitsPerSecond: 1411200,
+          sampleRate: 44100,
+          numberOfAudioChannels: 1,
+          disableLogs: false,
+          ondataavailable: e => {
+            if (this.shouldStop) {
+              recorder.stopRecording(blobUrl => {
+                this.audioBlob = recorder.getBlob();
+                this.audioSrc = blobUrl;
+                stream.getAudioTracks()[0].stop();
+              });
+              this.recording = false;
+              this.shouldStop = false;
+            }
+          }
+        });
         this.recording = true;
 
-        recorder.ondataavailable = e => {
-          if (e.data.size > 0) {
-            chunks.push(e.data);
-          }
-
-          if (this.shouldStop) {
-            recorder.stop();
-            this.recording = false;
-            this.shouldStop = false;
-          }
-        };
-
-        recorder.onstop = e => {
-          this.audioBlob = new Blob(chunks, { type: "audio/wave; codecs=0" });
-          this.audioSrc = URL.createObjectURL(this.audioBlob);
-          stream.getAudioTracks()[0].stop();
-        };
-
-        recorder.start(100);
-        setTimeout(() => {
-          if (chunks.length == 0) {
-            recorder.stop();
-            stream.getAudioTracks()[0].stop();
-            this.closeModal();
-            alert(
-              "¡No se ha podido iniciar la grabación! Compruebe el micrófono."
-            );
-          }
-        }, 1000);
+        recorder.startRecording();
       };
 
       if (!this.recording) {
@@ -108,9 +98,18 @@ export default {
         if (permision != "denied") {
           navigator.mediaDevices
             .getUserMedia({ audio: true, video: false })
-            .then(handleSuccess);
+            .then(handleSuccess)
+            .catch(e => {
+              notificationBus.$emit(
+                "ERROR",
+                "No se pudo acceder al micrófono."
+              );
+            });
         } else {
-          alert("¡No ha sido posible obtener acceso al micrófono!");
+          notificationBus.$emit(
+            "ERROR",
+            "Sin permiso para acceder al micrófono."
+          );
         }
       } else if (!this.shouldStop) {
         this.shouldStop = true;
@@ -121,7 +120,7 @@ export default {
       let form = new FormData();
       form.append("file", this.audioBlob);
       form.append("text", this.text);
-      
+
       try {
         let response = await axios({
           method: "post",
