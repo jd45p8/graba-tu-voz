@@ -1,13 +1,15 @@
 <template>
   <div class="recordmodal">
     <v-dialog :value="open" persistent max-width="400px">
-      <v-card class="d-flex flex-column" color="white">
+      <v-card :loading="uploading" class="d-flex flex-column" color="white">
         <v-card-title class="headline justify-center">Grabar</v-card-title>
         <v-card-text class="subtitle-1">Debes grabar tu voz diciendo: "{{text}}"</v-card-text>
 
+        <audio-player ref="recorderPlayer" v-if="audioSrc" class="px-7" :src="audioSrc"></audio-player>
+
         <v-btn
           :class="{'blue-dark':!recording, 'red':recording}"
-          v-if="!finishedRecording"
+          v-else
           dark
           fab
           depressed
@@ -18,12 +20,15 @@
           <v-icon>{{recording? 'mdi-stop':'mdi-microphone'}}</v-icon>
         </v-btn>
 
-        <audio-player id="recorder-player" v-if="finishedRecording" class="px-7" :src="audioSrc" ></audio-player>
-
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn class="dark-text" text @click="closeModal">Cancelar</v-btn>
-          <v-btn class="blue-dark-text mr-2" text @click="closeModal">Enviar</v-btn>
+          <v-btn class="dark-text" text @click="closeModal" :disabled="uploading">Cancelar</v-btn>
+          <v-btn
+            class="blue-dark-text mr-2"
+            text
+            @click="uploadAudio"
+            :disabled="!audioSrc || uploading"
+          >Enviar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -32,6 +37,9 @@
 
 <script>
 import AudioPlayer from "../components/AudioPlayer.vue";
+import { notificationBus } from "../main";
+
+const axios = require("axios");
 
 export default {
   name: "RecordModal",
@@ -39,8 +47,15 @@ export default {
     return {
       recording: false,
       shouldStop: false,
-      finishedRecording: false,
-      audioSrc: ""
+      audioSrc: "",
+      audioBlob: null,
+      uploading: false,
+      recordingOptions: {
+        sampleSize: 32,
+        chanelcount: 1,
+        samplerate: "44100",
+        mimeType: "video/webm;codecs=vp9"
+      }
     };
   },
   methods: {
@@ -48,39 +63,29 @@ export default {
       this.$emit("closeModal");
       this.recording = false;
       this.shouldStop = false;
-      this.finishedRecording = false;
+      this.audioSrc = "";
     },
     startRecording: async function() {
       var handleSuccess = stream => {
-        const options = {
-          sampleSize: 32,
-          chanelcount: 1,
-          samplerate: "44100",
-          mimeType: "video/webm;codecs=vp9"
-        };
         const chunks = [];
-        const recorder = new MediaRecorder(stream, options);
-
+        const recorder = new MediaRecorder(stream, this.recordingOptions);
         this.recording = true;
-        this.shouldStop = false;
 
         recorder.ondataavailable = e => {
           if (e.data.size > 0) {
             chunks.push(e.data);
           }
 
-          if (this.shouldStop && this.recording) {
+          if (this.shouldStop) {
             recorder.stop();
             this.recording = false;
-            this.finishedRecording = true;
             this.shouldStop = false;
           }
         };
 
         recorder.onstop = e => {
-          this.audioSrc = URL.createObjectURL(
-            new Blob(chunks, { type: "audio/wav; codecs=0" })
-          );
+          this.audioBlob = new Blob(chunks, { type: "audio/wave; codecs=0" });
+          this.audioSrc = URL.createObjectURL(this.audioBlob);
           stream.getAudioTracks()[0].stop();
         };
 
@@ -110,6 +115,32 @@ export default {
       } else if (!this.shouldStop) {
         this.shouldStop = true;
       }
+    },
+    uploadAudio: async function() {
+      this.uploading = true;
+      let form = new FormData();
+      form.append("file", this.audioBlob);
+      form.append("text", this.text);
+      
+      try {
+        let response = await axios({
+          method: "post",
+          url: `${window["URL_API"]}/recording`,
+          headers: {
+            Authorization: `Bearer ${localStorage.token}`
+          },
+          data: form
+        });
+        notificationBus.$emit("SUCCESS", response.data.message);
+        this.closeModal();
+      } catch (error) {
+        if (error.response.status >= 500) {
+          notificationBus.$emit("ERROR", error.response.data.message);
+        } else {
+          notificationBus.$emit("WARNING", error.response.data.message);
+        }
+      }
+      this.uploading = false;
     },
     checkPermision: function() {
       const self = this;

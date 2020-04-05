@@ -33,7 +33,7 @@ export default {
       textTime: "0:00",
       sliderPosition: 0,
       maxSlider: 1000,
-      player: document.createElement('audio'),
+      player: document.createElement("audio"),
       loading: false
     };
   },
@@ -70,9 +70,29 @@ export default {
         this.sliderPosition =
           this.maxSlider * (this.currentTime / this.duration);
         this.textTime = `${current} / ${max}`;
-      }else{
-        this.textTime = "0:00 / 0:00"
+      } else {
+        this.textTime = "0:00 / 0:00";
       }
+    },
+    updatePlayer: function() {
+      // Actualiza la duración de la grabación
+      this.loading = true;
+      this.player.src = this.src;
+      let tempPlayer = document.createElement("audio");
+      tempPlayer.preload = "auto";
+      tempPlayer.muted = true;
+      tempPlayer.src = this.src;
+      tempPlayer.muted = true;
+      tempPlayer.ondurationchange = e => {
+        if (tempPlayer.duration != Infinity) {
+          tempPlayer.ondurationchange = null;
+          tempPlayer.pause();
+          this.duration = tempPlayer.duration;
+          this.loading = false;
+          return;
+        }
+      };
+      tempPlayer.play();
     }
   },
   watch: {
@@ -82,31 +102,16 @@ export default {
     duration: function() {
       this.updateTextTime();
     },
-    src: async function() {
-      // Actualiza la duración de la grabación
-      this.loading = true;
-      this.player.src = this.src;
-      let tempPlayer = document.createElement('audio');
-      tempPlayer.preload = 'auto';
-      tempPlayer.muted = true;
-      tempPlayer.src = this.src;
-      tempPlayer.muted = true;
-      tempPlayer.ondurationchange = e =>{
-        if (tempPlayer.duration != Infinity) {
-          tempPlayer.ondurationchange = null;
-          tempPlayer.pause();
-          this.duration = tempPlayer.duration;
-          this.loading = false;
-          return;
-        }
-      }
-      tempPlayer.play();
+    src: function() {
+      this.updatePlayer();
     }
   },
   mounted: function() {
     this.player.volume = 1;
-    this.player.preload = 'auto';
-    this.duration = this.player.duration;
+    this.player.preload = "auto";
+    if (this.src != "") {
+      this.updatePlayer();
+    }
 
     this.player.onplay = e => {
       this.isPlaying = true;
@@ -128,5 +133,5 @@ export default {
       this.duration = this.player.duration;
     };
   }
-}
+};
 </script>
