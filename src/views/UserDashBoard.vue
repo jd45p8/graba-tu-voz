@@ -5,7 +5,11 @@
       <v-row>
         <template v-for="phrase in phrases">
           <v-col class="pa-1" :key="phrase._id" cols="12" sm="6" md="4" lg="3">
-            <v-skeleton-loader type="card-heading" v-if="phrase.loading" class="elevation-1 py-2"></v-skeleton-loader>
+            <v-skeleton-loader
+              type="card-heading"
+              v-if="loading"
+              class="elevation-1 py-2"
+            ></v-skeleton-loader>
             <v-expansion-panels v-else>
               <v-expansion-panel>
                 <v-expansion-panel-header>
@@ -64,12 +68,12 @@ export default {
   data: function() {
     return {
       showRecordModal: false,
+      loading: false,
       textToRecord: "",
       phrases: [
         {
           _id: 0,
-          text: "...",
-          loading: true
+          text: "..."
         }
       ]
     };
@@ -100,9 +104,6 @@ export default {
           }
         });
         this.phrases = response.data;
-        this.phrases.forEach(e => {
-          e.loading = false;
-        });
       } catch (error) {
         if (error.response.status >= 500) {
           return notificationBus.$emit("ERROR", error.response.data.message);
@@ -110,12 +111,29 @@ export default {
         this.authenticationError();
       }
     },
-    updateRecordings: function() {
-
+    updateRecordings: async function() {
+      try {
+        let response = await axios({
+          method: "get",
+          url: `${window["URL_API"]}/recording/list`,
+          headers: {
+            Authorization: `Bearer ${localStorage.token}`
+          }
+        });
+        console.log(response.data);
+      } catch (error) {
+        if (error.response.status >= 500) {
+          return notificationBus.$emit("ERROR", error.response.data.message);
+        }
+        this.authenticationError();
+      }
     }
   },
-  mounted() {
-    this.updatePhrases();
+  mounted: async function() {
+    this.loading = true;
+    await this.updatePhrases();
+    await this.updateRecordings();
+    this.loading = false;
   },
   components: {
     RecordModal,
