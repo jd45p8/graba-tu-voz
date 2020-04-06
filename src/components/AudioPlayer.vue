@@ -23,6 +23,9 @@
 </template>
 
 <script>
+import { notificationBus } from "../main";
+const axios = require("axios");
+
 export default {
   name: "AudioPlayer",
   data: function() {
@@ -31,6 +34,7 @@ export default {
       currentTime: 0,
       duration: 0,
       textTime: "0:00",
+      downloaded: false,
       sliderPosition: 0,
       maxSlider: 1000,
       player: document.createElement("audio"),
@@ -41,13 +45,20 @@ export default {
     src: {
       required: true,
       type: String
+    },
+    auth: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
-    togglePlay: function() {
+    togglePlay: async function() {
       if (this.isPlaying) {
         this.player.pause();
       } else {
+        if (this.auth && !this.downloaded) {
+          await this.getAudioWithAuth();
+        }
         this.player.play();
       }
     },
@@ -74,6 +85,31 @@ export default {
         this.textTime = "0:00 / 0:00";
       }
     },
+    getAudioWithAuth: async function() {
+      this.loading = true;
+      try {
+        let response = await axios({
+          method: "get",
+          url: this.src,
+          responseType: 'blob',
+          headers: {
+            Authorization: `Bearer ${localStorage.token}`
+          }
+        });
+        this.player.src = URL.createObjectURL(response.data);
+      } catch (error) {
+        if (error.response) {
+          if (error.response.status >= 500) {
+            notificationBus.$emit("ERROR", error.response.data.message);
+          } else {
+            this.$emit("AUTHERROR", error);
+          }
+        } else {
+          notificationBus.$emit("ERROR", "Algo ha salido mal.");
+        }
+      }
+      this.loading = false;
+    }
   },
   watch: {
     currentTime: function() {
@@ -83,14 +119,21 @@ export default {
       this.updateTextTime();
     },
     src: function() {
-      this.player.src = this.src;
+      if (!this.auth) {
+        this.player.src = this.src;
+        downloaded = true;
+      } else {
+        downloaded = false;
+      }
     }
   },
   mounted: function() {
     this.player.volume = 1;
     this.player.preload = "auto";
-    this.player.src = this.src;
-    
+    if (!this.auth) {
+      this.player.src = this.src;
+    }
+
     this.player.onplay = e => {
       this.isPlaying = true;
     };

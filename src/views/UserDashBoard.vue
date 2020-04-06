@@ -22,13 +22,21 @@
                 <v-expansion-panel-content>
                   <v-card
                     v-for="(recording, key) in phrase.recordings"
-                    :key="recording._key"
+                    :key="key"
                     outlined
                     :class="{'my-2': key >= 1}"
                   >
-                    <v-row no-gutters align="center">
+                    <v-row no-gutters align="center" class="pl-3">
+                      <v-col cols="auto">
+                        <span class="dark-text subtitle-2 font-weight-regular">{{key}}</span>
+                      </v-col>
                       <v-col>
-                        <audio-player :id="`player-${phrase._id}-${key}`" src></audio-player>
+                        <audio-player
+                          :id="`player-${phrase._id}-${key}`"
+                          :src="`${URL_API}/recording/${recording._id}`"
+                          :auth="true"
+                          v-on:AUTHERROR="authenticationError"
+                        ></audio-player>
                       </v-col>
                       <v-col cols="auto">
                         <v-btn color="grey darken-1" fab small text>
@@ -71,6 +79,7 @@ export default {
   data: function() {
     return {
       showRecordModal: false,
+      URL_API: window["URL_API"],
       loading: false,
       textToRecord: "",
       phrases: [
