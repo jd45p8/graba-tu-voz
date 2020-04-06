@@ -136,7 +136,6 @@ export default {
         this.phrases[phrase_key].recordings.splice(recording_key, 1);
         notificationBus.$emit("SUCCESS", response.data.message);
       } catch (error) {
-        console.log(error);
         this.showError(error);
       }
     },

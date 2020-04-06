@@ -71,7 +71,6 @@ export default {
           mimeType: "audio/wav",
           recorderType: RecordRTC.StereoAudioRecorder,
           timeSlice: 100,
-          bitsPerSecond: 1411200,
           sampleRate: 44100,
           numberOfAudioChannels: 1,
           disableLogs: true,
@@ -102,7 +101,7 @@ export default {
             .catch(e => {
               notificationBus.$emit(
                 "ERROR",
-                "No se pudo acceder al micrófono."
+                "Al parecer no se pudo acceder al micrófono."
               );
             });
         } else {

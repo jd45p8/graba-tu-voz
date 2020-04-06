@@ -31,7 +31,7 @@ export default {
         text: m,
         timeout: 3000,
       };
-      this.messages.push(message);
+      this.messages.unshift(message);
       setTimeout(() => {
         this.messages.splice(this.messages.indexOf(message), 1);
       }, 3000);
