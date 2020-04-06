@@ -72,10 +72,7 @@ const routes = [
 
       localStorage.removeItem("token");
       localStorage.removeItem("email");
-      from.matched[0].instances.default.$emit("UPDATENAV");
-      next({
-        name: "Login"
-      });
+      router.go('login')
     }
   },
   {

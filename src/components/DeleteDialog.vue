@@ -65,6 +65,7 @@ export default {
           }
         });
         notificationBus.$emit("SUCCESS", response.data.message);
+        this.notifyParentDeletion();
       } catch (error) {
         if (error.response) {
           let type = error.response.status >= 500 ? "ERROR" : "WARNING";
@@ -77,7 +78,6 @@ export default {
           notificationBus.$emit("ERROR", "Algo ha salido mal.");
         }
       }
-      this.notifyParentDeletion();
       this.deleting = false;
     },
     close: function() {
