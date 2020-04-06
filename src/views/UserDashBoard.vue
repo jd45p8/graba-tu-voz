@@ -1,11 +1,15 @@
 <template>
   <div class="userdashboard">
     <record-modal
-      :open="showRecordModal"
+      :show.sync="showRecordModal"
       :text="textToRecord"
-      @closeModal="closeRecordModal"
-      v-on:AUTHERROR="authenticationError"
-      v-on:UPLOADED="updateRecordings"
+      @AUTHERROR="authenticationError"
+      @UPLOADED="updateRecordings"
+    />
+    <delete-dialog
+      ref="deleteDialog"
+      :show.sync="showDeleteDialog"
+      @DELETE="deleteRecording"
     />
     <v-col class="mt-n5">
       <v-row>
@@ -41,7 +45,7 @@
                       </v-col>
                       <v-col cols="auto">
                         <v-btn
-                          @click="deleteRecording(recording._id, p_key, key)"
+                          @click="openDeleteDialog(phrase, p_key, key)"
                           color="grey darken-1"
                           fab
                           small
@@ -76,6 +80,7 @@
 <script>
 import RecordModal from "../components/RecordModal.vue";
 import AudioPlayer from "../components/AudioPlayer.vue";
+import DeleteDialog from "../components/DeleteDialog.vue";
 import { notificationBus } from "../main";
 import router from "../router";
 
@@ -86,6 +91,7 @@ export default {
   data: function() {
     return {
       showRecordModal: false,
+      showDeleteDialog: false,
       URL_API: window["URL_API"],
       loading: false,
       textToRecord: "",
@@ -103,9 +109,12 @@ export default {
       this.textToRecord = text;
       this.showRecordModal = true;
     },
-    closeRecordModal: function() {
-      this.showRecordModal = false;
-      this.textToRecord = "";
+    openDeleteDialog: function(phrase, phrase_key, recording_key) {
+      let deleteDialog = this.$refs.deleteDialog;
+      deleteDialog.$data.phrase = phrase;
+      deleteDialog.$data.phrase_key = phrase_key;
+      deleteDialog.$data.recording_key = recording_key;
+      this.showDeleteDialog = true;
     },
     authenticationError(error) {
       localStorage.removeItem("token");
@@ -124,11 +133,11 @@ export default {
         notificationBus.$emit("ERROR", "Algo ha salido mal.");
       }
     },
-    deleteRecording: async function(_id, phrase_key, recording_key) {
+    deleteRecording: async function(recording_id, phrase_key, recording_key) {
       try {
         let response = await axios({
           method: "delete",
-          url: `${window["URL_API"]}/recording/${_id}`,
+          url: `${window["URL_API"]}/recording/${recording_id}`,
           headers: {
             Authorization: `Bearer ${localStorage.token}`
           }
@@ -201,7 +210,8 @@ export default {
   },
   components: {
     RecordModal,
-    AudioPlayer
+    AudioPlayer,
+    DeleteDialog
   }
 };
 </script>

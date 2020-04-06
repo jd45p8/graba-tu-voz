@@ -1,7 +1,10 @@
 <template>
   <div class="recordmodal">
-    <v-dialog :value="open" persistent max-width="400px">
-      <v-card :loading="uploading" class="d-flex flex-column" color="white">
+    <v-dialog :value="show" persistent max-width="400px">
+      <v-card :loading="uploading" class="d-flex flex-column">
+        <template slot="progress">
+          <v-progress-linear indeterminate color="blue-dark"></v-progress-linear>
+        </template>
         <v-card-title class="headline justify-center">Grabar</v-card-title>
         <v-card-text class="subtitle-1">Debes grabar tu voz diciendo: "{{text}}"</v-card-text>
 
@@ -22,7 +25,12 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn class="dark-text" text @click="closeModal" :disabled="recording || uploading">Cancelar</v-btn>
+          <v-btn
+            class="dark-text"
+            text
+            @click="closeModal"
+            :disabled="recording || uploading"
+          >Cancelar</v-btn>
           <v-btn
             class="blue-dark-text mr-2"
             text
@@ -59,7 +67,7 @@ export default {
   },
   methods: {
     closeModal: function() {
-      this.$emit("closeModal");
+      this.$emit("update:show", false);
       this.recording = false;
       this.shouldStop = false;
       this.audioSrc = "";
@@ -155,7 +163,7 @@ export default {
     }
   },
   props: {
-    open: {
+    show: {
       type: Boolean,
       required: true
     },

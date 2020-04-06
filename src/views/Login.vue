@@ -23,14 +23,15 @@
               outlined
             ></v-text-field>
             <v-row justify="center" class="mt-3">
+              <v-btn class="blue-dark-text" text to="/join">Registrarse</v-btn>
               <v-btn
                 color="blue-dark"
+                class="ml-2"
                 :dark="!logginIn"
                 depressed
                 @click="login"
                 :disabled="logginIn"
               >Ingresar</v-btn>
-              <v-btn class="ml-2 blue-dark-text" text to="/join">Registrarse</v-btn>
             </v-row>
           </div>
         </v-card>
