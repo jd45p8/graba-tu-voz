@@ -108,6 +108,7 @@ export default {
           notificationBus.$emit("ERROR", "Algo ha salido mal.");
         }
       }
+      this.downloaded = true;
       this.loading = false;
     }
   },
@@ -121,9 +122,9 @@ export default {
     src: function() {
       if (!this.auth) {
         this.player.src = this.src;
-        downloaded = true;
+        this.downloaded = true;
       } else {
-        downloaded = false;
+        this.downloaded = false;
       }
     }
   },
