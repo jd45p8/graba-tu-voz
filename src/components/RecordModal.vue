@@ -5,7 +5,7 @@
         <template slot="progress">
           <v-progress-linear indeterminate color="blue-dark"></v-progress-linear>
         </template>
-        <v-card-title class="headline justify-center">Grabar</v-card-title>
+        <v-card-title class="headline">Grabar</v-card-title>
         <v-card-text class="subtitle-1">Debes grabar tu voz diciendo: "{{text}}"</v-card-text>
 
         <audio-player ref="recorderPlayer" v-if="audioSrc" class="px-7" :src="audioSrc"></audio-player>

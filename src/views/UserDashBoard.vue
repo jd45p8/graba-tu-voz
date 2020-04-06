@@ -9,7 +9,8 @@
     <delete-dialog
       ref="deleteDialog"
       :show.sync="showDeleteDialog"
-      @DELETE="deleteRecording"
+      @DELETED="removeRecording"
+      @AUTHERROR="authenticationError"
     />
     <v-col class="mt-n5">
       <v-row>
@@ -133,20 +134,8 @@ export default {
         notificationBus.$emit("ERROR", "Algo ha salido mal.");
       }
     },
-    deleteRecording: async function(recording_id, phrase_key, recording_key) {
-      try {
-        let response = await axios({
-          method: "delete",
-          url: `${window["URL_API"]}/recording/${recording_id}`,
-          headers: {
-            Authorization: `Bearer ${localStorage.token}`
-          }
-        });
-        this.phrases[phrase_key].recordings.splice(recording_key, 1);
-        notificationBus.$emit("SUCCESS", response.data.message);
-      } catch (error) {
-        this.showError(error);
-      }
+    removeRecording: function(phrase_key, recording_key) {
+      this.phrases[phrase_key].recordings.splice(recording_key, 1);
     },
     updatePhrases: async function() {
       try {
