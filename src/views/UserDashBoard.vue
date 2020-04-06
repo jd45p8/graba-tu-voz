@@ -136,8 +136,9 @@ export default {
     },
     showError(error) {
       if (error.response) {
-        if (error.response.status >= 500) {
-          return notificationBus.$emit("ERROR", error.response.data.message);
+        let type = error.response.status >= 500 ? "ERROR" : "WARNING";
+        if (error.response.status != 401) {
+          return notificationBus.$emit(type, error.response.data.message);
         }
         this.authenticationError(error);
       } else {

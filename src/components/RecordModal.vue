@@ -141,8 +141,9 @@ export default {
         notificationBus.$emit("SUCCESS", response.data.message);
       } catch (error) {
         if (error.response) {
-          if (error.response.status >= 500) {
-            notificationBus.$emit("ERROR", error.response.data.message);
+          let type = error.response.status >= 500 ? "ERROR" : "WARNING";
+          if (error.response.status != 401) {
+            notificationBus.$emit(type, error.response.data.message);
           } else {
             this.$emit("AUTHERROR", error);
           }

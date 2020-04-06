@@ -66,10 +66,10 @@ export default {
         });
         notificationBus.$emit("SUCCESS", response.data.message);
       } catch (error) {
-        console.log(error);
         if (error.response) {
-          if (error.response.status >= 500) {
-            notificationBus.$emit("ERROR", error.response.data.message);
+          let type = error.response.status >= 500 ? "ERROR" : "WARNING";
+          if (error.response.status != 401) {
+            notificationBus.$emit(type, error.response.data.message);
           } else {
             this.$emit("AUTHERROR", error);
           }
@@ -77,8 +77,8 @@ export default {
           notificationBus.$emit("ERROR", "Algo ha salido mal.");
         }
       }
-      this.deleting = false;
       this.notifyParentDeletion();
+      this.deleting = false;
     },
     close: function() {
       this.$emit("update:show", false);
