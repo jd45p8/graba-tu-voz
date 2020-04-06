@@ -5,6 +5,7 @@
       :text="textToRecord"
       @closeModal="closeRecordModal"
       v-on:AUTHERROR="authenticationError"
+      v-on:UPLOADED="updateRecordings"
     />
     <v-col class="mt-n5">
       <v-row>
@@ -153,7 +154,9 @@ export default {
         let j = 0;
         while (i < data.length && j < this.phrases.length) {
           if (this.phrases[j].text == data[i].text) {
-            this.phrases[j].recordings.push(data[i]);
+            if (!this.phrases[j].recordings.some(r => r._id == data[i]._id)) {
+              this.phrases[j].recordings.push(data[i]);
+            }
             i++;
           } else {
             j++;

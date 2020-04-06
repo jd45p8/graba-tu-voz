@@ -130,6 +130,7 @@ export default {
           },
           data: form
         });
+        this.$emit("UPLOADED");
         notificationBus.$emit("SUCCESS", response.data.message);
       } catch (error) {
         if (error.response) {
