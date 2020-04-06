@@ -9,6 +9,9 @@
     <delete-dialog
       ref="deleteDialog"
       :show.sync="showDeleteDialog"
+      :phrase="deleteDialogContent.phrase"
+      :phrase_key="deleteDialogContent.phrase_key"
+      :recording_key="deleteDialogContent.recording_key"
       @DELETED="removeRecording"
       @AUTHERROR="authenticationError"
     />
@@ -96,6 +99,13 @@ export default {
       URL_API: window["URL_API"],
       loading: false,
       textToRecord: "",
+      deleteDialogContent: {
+        phrase: {
+          text: ""
+        },
+        phrase_key: 0,
+        recording_key: 0
+      },
       phrases: [
         {
           _id: 0,
@@ -112,9 +122,9 @@ export default {
     },
     openDeleteDialog: function(phrase, phrase_key, recording_key) {
       let deleteDialog = this.$refs.deleteDialog;
-      deleteDialog.$data.phrase = phrase;
-      deleteDialog.$data.phrase_key = phrase_key;
-      deleteDialog.$data.recording_key = recording_key;
+      this.deleteDialogContent.phrase = phrase;
+      this.deleteDialogContent.phrase_key = phrase_key;
+      this.deleteDialogContent.recording_key = recording_key;
       this.showDeleteDialog = true;
     },
     authenticationError(error) {

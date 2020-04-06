@@ -26,18 +26,25 @@ export default {
   name: "DeleteDialog",
   data: function() {
     return {
-      deleting: false,
-      phrase: {
-        text: ""
-      },
-      phrase_key: 0,
-      recording_key: 0
+      deleting: false
     };
   },
   props: {
     show: {
       type: Boolean,
       default: false
+    },
+    phrase: {
+      type: Object,
+      required: true
+    },
+    phrase_key: {
+      type: Number,
+      required: true
+    },
+    recording_key: {
+      type: Number,
+      required: true
     }
   },
   methods: {
