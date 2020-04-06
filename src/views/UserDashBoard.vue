@@ -1,15 +1,16 @@
 <template>
   <div class="userdashboard">
-    <record-modal :open="showRecordModal" :text="textToRecord" @closeModal="closeRecordModal" />
+    <record-modal
+      :open="showRecordModal"
+      :text="textToRecord"
+      @closeModal="closeRecordModal"
+      v-on:AUTHERROR="authenticationError"
+    />
     <v-col class="mt-n5">
       <v-row>
         <template v-for="phrase in phrases">
           <v-col class="pa-1" :key="phrase._id" cols="12" sm="6" md="4" lg="3">
-            <v-skeleton-loader
-              type="card-heading"
-              v-if="loading"
-              class="elevation-1 py-2"
-            ></v-skeleton-loader>
+            <v-skeleton-loader type="card-heading" v-if="loading" class="elevation-1 py-2"></v-skeleton-loader>
             <v-expansion-panels v-else>
               <v-expansion-panel>
                 <v-expansion-panel-header>
@@ -87,11 +88,11 @@ export default {
       this.showRecordModal = false;
       this.textToRecord = "";
     },
-    authenticationError() {
+    authenticationError(error) {
       localStorage.removeItem("token");
       localStorage.removeItem("email");
       this.$emit("UPDATENAV");
-      this.$router.push("Login");
+      this.$router.push("login");
       notificationBus.$emit("WARNING", error.response.data.message);
     },
     updatePhrases: async function() {
@@ -105,10 +106,15 @@ export default {
         });
         this.phrases = response.data;
       } catch (error) {
-        if (error.response.status >= 500) {
-          return notificationBus.$emit("ERROR", error.response.data.message);
+        this.phrases = [];
+        if (error.response) {
+          if (error.response.status >= 500) {
+            return notificationBus.$emit("ERROR", error.response.data.message);
+          }
+          this.authenticationError(error);
+        } else {
+          notificationBus.$emit("ERROR", "Algo ha salido mal.");
         }
-        this.authenticationError();
       }
     },
     updateRecordings: async function() {
@@ -122,17 +128,23 @@ export default {
         });
         console.log(response.data);
       } catch (error) {
-        if (error.response.status >= 500) {
-          return notificationBus.$emit("ERROR", error.response.data.message);
+        if (error.response) {
+          if (error.response.status >= 500) {
+            return notificationBus.$emit("ERROR", error.response.data.message);
+          }
+          this.authenticationError(error);
+        } else {
+          notificationBus.$emit("ERROR", "Algo ha salido mal.");
         }
-        this.authenticationError();
       }
     }
   },
   mounted: async function() {
     this.loading = true;
     await this.updatePhrases();
-    await this.updateRecordings();
+    if (this.phrases.length > 0) {
+      await this.updateRecordings();
+    }
     this.loading = false;
   },
   components: {

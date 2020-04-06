@@ -59,10 +59,14 @@ const routes = [
         });
         notificationBus.$emit("SUCCESS", response.data.message);
       } catch (error) {
-        if (error.response.status >= 500) {
-          notificationBus.$emit("ERROR", error.response.data.message);
+        if (error.response) {
+          if (error.response.status >= 500) {
+            notificationBus.$emit("ERROR", error.response.data.message);
+          } else {
+            notificationBus.$emit("WARNING", error.response.data.message);
+          }
         } else {
-          notificationBus.$emit("WARNING", error.response.data.message);
+          notificationBus.$emit("ERROR", "Algo ha salido mal.");
         }
       }
 

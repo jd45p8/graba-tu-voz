@@ -74,7 +74,7 @@ export default {
           bitsPerSecond: 1411200,
           sampleRate: 44100,
           numberOfAudioChannels: 1,
-          disableLogs: false,
+          disableLogs: true,
           ondataavailable: e => {
             if (this.shouldStop) {
               recorder.stopRecording(blobUrl => {
@@ -131,14 +131,18 @@ export default {
           data: form
         });
         notificationBus.$emit("SUCCESS", response.data.message);
-        this.closeModal();
       } catch (error) {
-        if (error.response.status >= 500) {
-          notificationBus.$emit("ERROR", error.response.data.message);
+        if (error.response) {
+          if (error.response.status >= 500) {
+            notificationBus.$emit("ERROR", error.response.data.message);
+          } else {
+            this.$emit("AUTHERROR", error);
+          }
         } else {
-          notificationBus.$emit("WARNING", error.response.data.message);
+          notificationBus.$emit("ERROR", "Algo ha salido mal.");
         }
       }
+      this.closeModal();
       this.uploading = false;
     },
     checkPermision: function() {

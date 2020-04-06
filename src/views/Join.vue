@@ -76,7 +76,14 @@
             <div class="mb-5">
               <p>Presionando el botón aceptar a continuación finalizará su registro y acepta que usemos la infomración que suministre en esta plataforma para entrenar el o los modelos que sean necesarios, y únicamente intentaremos contactarlo si seleccionó que desea participar en la demostración.</p>
             </div>
-            <v-btn @click="nextStep" :loading="sending" color="blue-dark" class="mb-1" depressed dark>Aceptar</v-btn>
+            <v-btn
+              @click="nextStep"
+              :loading="sending"
+              color="blue-dark"
+              class="mb-1"
+              depressed
+              dark
+            >Aceptar</v-btn>
             <v-btn @click="step = 2" class="ml-2" text>Anterior</v-btn>
           </v-stepper-content>
         </v-stepper>
@@ -176,10 +183,14 @@ export default {
             this.sending = false;
             this.$router.push("login");
           } catch (error) {
-            if (error.response.status >= 500) {
-              notificationBus.$emit("ERROR", error.response.data.message);
+            if (error.response) {
+              if (error.response.status >= 500) {
+                notificationBus.$emit("ERROR", error.response.data.message);
+              } else {
+                notificationBus.$emit("WARNING", error.response.data.message);
+              }
             } else {
-              notificationBus.$emit("WARNING", error.response.data.message);
+              notificationBus.$emit("ERROR", "Algo ha salido mal.");
             }
           }
       }

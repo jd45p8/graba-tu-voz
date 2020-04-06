@@ -23,7 +23,13 @@
               outlined
             ></v-text-field>
             <v-row justify="center" class="mt-3">
-              <v-btn color="blue-dark" :dark="!logginIn" depressed @click="login" :disabled="logginIn">Ingresar</v-btn>
+              <v-btn
+                color="blue-dark"
+                :dark="!logginIn"
+                depressed
+                @click="login"
+                :disabled="logginIn"
+              >Ingresar</v-btn>
               <v-btn class="ml-2 blue-dark-text" text to="/join">Registrarse</v-btn>
             </v-row>
           </div>
@@ -89,10 +95,14 @@ export default {
         this.$emit("UPDATENAV");
         this.$router.push("userdashboard");
       } catch (error) {
-        if (error.response.status >= 500) {
-          notificationBus.$emit("ERROR", error.response.data.message);
+        if (error.response) {
+          if (error.response.status >= 500) {
+            notificationBus.$emit("ERROR", error.response.data.message);
+          } else {
+            notificationBus.$emit("WARNING", error.response.data.message);
+          }
         } else {
-          notificationBus.$emit("WARNING", error.response.data.message);
+          notificationBus.$emit("ERROR", "Algo ha salido mal.");
         }
       }
       this.logginIn = false;
