@@ -43,6 +43,7 @@
                         <audio-player
                           :id="`player-${p_key}-${key}`"
                           :src="`${URL_API}/recording/${recording._id}`"
+                          :metaDuration="recording.duration"
                           :auth="true"
                           v-on:AUTHERROR="authenticationError"
                         ></audio-player>

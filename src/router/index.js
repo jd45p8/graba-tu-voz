@@ -72,7 +72,7 @@ const routes = [
 
       localStorage.removeItem("token");
       localStorage.removeItem("email");
-      router.go('login')
+      router.go("login");
     }
   },
   {

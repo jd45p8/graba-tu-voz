@@ -49,6 +49,9 @@ export default {
     auth: {
       type: Boolean,
       default: false
+    },
+    metaDuration: {
+      type: Number
     }
   },
   methods: {
@@ -91,7 +94,7 @@ export default {
         let response = await axios({
           method: "get",
           url: this.src,
-          responseType: 'blob',
+          responseType: "blob",
           headers: {
             Authorization: `Bearer ${localStorage.token}`
           }
@@ -121,6 +124,10 @@ export default {
       this.updateTextTime();
     },
     src: function() {
+      if (this.metaDuration) {
+        this.duration = this.metaDuration;
+      }
+
       if (!this.auth) {
         this.player.src = this.src;
         this.downloaded = true;
@@ -134,6 +141,10 @@ export default {
     this.player.preload = "auto";
     if (!this.auth) {
       this.player.src = this.src;
+    }
+
+    if (this.metaDuration) {
+      this.duration = this.metaDuration;
     }
 
     this.player.onplay = e => {
