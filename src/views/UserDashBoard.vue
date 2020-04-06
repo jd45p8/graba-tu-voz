@@ -16,17 +16,19 @@
                 <v-expansion-panel-header>
                   <v-row align="center" class="dark-text">
                     <v-col cols="10">Frase {{phrase.text}}</v-col>
-                    <v-col cols="2" class="blue-dark-text">1/5</v-col>
+                    <v-col cols="2" class="blue-dark-text">{{phrase.recordings.length}}/5</v-col>
                   </v-row>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
-                  <v-card v-for="j in 4" :key="j" outlined :class="{'my-2': j > 1}">
-                    <v-row no-gutters align="center" class="px-3">
-                      <v-col cols="auto">
-                        <span class="dark-text subtitle-2 font-weight-regular">G {{j}}</span>
-                      </v-col>
+                  <v-card
+                    v-for="(recording, key) in phrase.recordings"
+                    :key="recording._key"
+                    outlined
+                    :class="{'my-2': key >= 1}"
+                  >
+                    <v-row no-gutters align="center">
                       <v-col>
-                        <audio-player :id="`player-${phrase._id}-${j}`" src></audio-player>
+                        <audio-player :id="`player-${phrase._id}-${key}`" src></audio-player>
                       </v-col>
                       <v-col cols="auto">
                         <v-btn color="grey darken-1" fab small text>
@@ -74,7 +76,8 @@ export default {
       phrases: [
         {
           _id: 0,
-          text: "..."
+          text: "...",
+          recordings: []
         }
       ]
     };
@@ -104,7 +107,13 @@ export default {
             Authorization: `Bearer ${localStorage.token}`
           }
         });
-        this.phrases = response.data;
+
+        let phrases = response.data;
+        phrases.sort((a, b) => {
+          return a.text < b.text ? -1 : 1;
+        });
+        phrases.forEach(e => (e.recordings = []));
+        this.phrases = phrases;
       } catch (error) {
         this.phrases = [];
         if (error.response) {
@@ -126,7 +135,21 @@ export default {
             Authorization: `Bearer ${localStorage.token}`
           }
         });
-        console.log(response.data);
+
+        let data = response.data;
+        data.sort((a, b) => {
+          return a.text < b.text ? -1 : 1;
+        });
+        let i = 0;
+        let j = 0;
+        while (i < data.length && j < this.phrases.length) {
+          if (this.phrases[j].text == data[i].text) {
+            this.phrases[j].recordings.push(data[i]);
+            i++;
+          } else {
+            j++;
+          }
+        }
       } catch (error) {
         if (error.response) {
           if (error.response.status >= 500) {

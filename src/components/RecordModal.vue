@@ -22,7 +22,7 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn class="dark-text" text @click="closeModal" :disabled="uploading">Cancelar</v-btn>
+          <v-btn class="dark-text" text @click="closeModal" :disabled="recording || uploading">Cancelar</v-btn>
           <v-btn
             class="blue-dark-text mr-2"
             text
