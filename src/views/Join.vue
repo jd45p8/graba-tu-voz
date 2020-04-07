@@ -67,8 +67,8 @@
                 outlined
               ></v-text-field>
             </div>
-            <v-btn @click="nextStep" color="blue-dark" class="mb-1" depressed dark>Continuar</v-btn>
-            <v-btn @click="step = 1" class="ml-2" text>Anterior</v-btn>
+            <v-btn @click="step = 1" text>Anterior</v-btn>
+            <v-btn @click="nextStep" color="blue-dark" class="mb-1 ml-2" depressed dark>Continuar</v-btn>            
           </v-stepper-content>
           <v-stepper-step :complete="step > 2" step="3">Política de datos</v-stepper-step>
 
@@ -83,15 +83,15 @@
                 seleccionó que desea participar en la demostración.
               </p>
             </div>
+            <v-btn @click="step = 2" text>Anterior</v-btn>
             <v-btn
               @click="nextStep"
               :loading="sending"
               color="blue-dark"
-              class="mb-1"
+              class="mb-1 ml-2"
               depressed
               dark
             >Aceptar</v-btn>
-            <v-btn @click="step = 2" class="ml-2" text>Anterior</v-btn>
           </v-stepper-content>
         </v-stepper>
       </v-col>
