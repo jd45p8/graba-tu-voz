@@ -22,11 +22,31 @@
             <v-skeleton-loader type="card-heading" v-if="loading" class="elevation-1 py-2"></v-skeleton-loader>
             <v-expansion-panels v-else>
               <v-expansion-panel>
-                <v-expansion-panel-header>
-                  <v-row align="center" class="dark-text">
-                    <v-col cols="10">Frase {{phrase.text}}</v-col>
-                    <v-col cols="2" class="blue-dark-text">{{phrase.recordings.length}}/5</v-col>
-                  </v-row>
+                <v-expansion-panel-header
+                  :disable-icon-rotate="phrase.recordings.length >= phrase.maxRecordings"
+                >
+                  <template v-slot:actions v-if="phrase.recordings.length >= phrase.maxRecordings">
+                    <v-icon class="green-light-text">mdi-check</v-icon>
+                  </template>
+
+                  <template v-slot="{ open }">
+                    <v-row class="dark-text">
+                      <v-col
+                        :cols="recordingsCount == 0 && !open ? 'auto' : ''"
+                      >Frase {{phrase.text}}</v-col>
+
+                      <v-col
+                        v-if="recordingsCount == 0 && !open"
+                        class="text--secondary text-truncate caption text-center"
+                      >Click aquí para grabar</v-col>
+
+                      <v-col
+                        v-if="phrase.recordings.length < phrase.maxRecordings"
+                        cols="auto"
+                        class="blue-dark-text"
+                      >{{phrase.recordings.length}}/{{phrase.maxRecordings}}</v-col>
+                    </v-row>
+                  </template>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-card
@@ -61,7 +81,7 @@
                       </v-col>
                     </v-row>
                   </v-card>
-                  <v-row justify="center">
+                  <v-row v-if="phrase.recordings.length < phrase.maxRecordings" justify="center">
                     <v-btn
                       @click="openRecordModal(phrase.text)"
                       color="blue-dark"
@@ -113,7 +133,8 @@ export default {
           text: "...",
           recordings: []
         }
-      ]
+      ],
+      recordingsCount: 0
     };
   },
   methods: {
@@ -148,6 +169,7 @@ export default {
     },
     removeRecording: function(phrase_key, recording_key) {
       this.phrases[phrase_key].recordings.splice(recording_key, 1);
+      this.recordingsCount -= 1;
     },
     updatePhrases: async function() {
       try {
@@ -163,7 +185,7 @@ export default {
         phrases.sort((a, b) => {
           return a.text < b.text ? -1 : 1;
         });
-        phrases.forEach(e => (e.recordings = []));
+        phrases.forEach(e => e.recordings = []);
         this.phrases = phrases;
       } catch (error) {
         this.phrases = [];
@@ -181,6 +203,7 @@ export default {
         });
 
         let data = response.data;
+        this.recordingsCount = data.length;
         data.sort((a, b) => {
           return a.text < b.text ? -1 : 1;
         });
