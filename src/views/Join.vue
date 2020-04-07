@@ -74,7 +74,14 @@
 
           <v-stepper-content step="3">
             <div class="mb-5">
-              <p>Presionando el botón aceptar a continuación finalizará su registro y acepta que usemos la infomración que suministre en esta plataforma para entrenar el o los modelos que sean necesarios, y únicamente intentaremos contactarlo si seleccionó que desea participar en la demostración.</p>
+              <p>
+                Presionando el botón aceptar, a continuación, finalizará su registro
+                y acepta que usemos la información que suministre en esta plataforma 
+                con el fin de entrenar el o los modelos que sean necesarios. Asimismo,
+                no se usará su información sensible con fines distintos a los descritos
+                anteriormente y en caso de ser necesario, intentaremos contactarlo si
+                seleccionó que desea participar en la demostración.
+              </p>
             </div>
             <v-btn
               @click="nextStep"

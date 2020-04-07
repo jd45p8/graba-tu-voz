@@ -22,8 +22,9 @@
           </v-row>
           <v-row justify="center" class="mt-6">
             <p class="font-weight-light title text-center text-md-left">
-              Un proyecto para la recolección de voces en
-              <b>español</b> para el entrenamiento de un modelo de reconocimiento de voz, que será implementado por estudiantes de ingeniería de sistemas en su proyecto final.
+              Es un proyecto para la recolección de voces en <b>español</b>,
+              que serán usadas en el entrenamiento de un modelo de reconocimiento de voz, 
+              implementado por estudiantes de ingeniería de sistemas en su proyecto final.
             </p>
           </v-row>
         </v-col>
@@ -34,7 +35,11 @@
           <v-card dark class="blue-dark pa-3 d-flex flex-column" height="100%">
             <div class="my-auto">
               <h1 class="display-2 text-center">Únete</h1>
-              <h2 class="font-weight-light subtitle-1 mt-2">Para identificar una persona por su voz, se necesita separar las voces de distintos individuos, por lo que necesitamos tomar algunos de tus datos para participar.</h2>
+              <h2 class="font-weight-light subtitle-1 mt-2">
+                En el proceso de identificación de personas por su voz, se necesita 
+                separar las voces por individuos. Por ello necesitamos tomar algunos 
+                de tus datos para participar.
+              </h2>
             </div>
           </v-card>
         </v-col>
@@ -42,7 +47,11 @@
           <v-card dark class="green-light pa-3 d-flex flex-column" height="100%">
             <div class="my-auto">
               <h1 class="display-2 text-center">Graba</h1>
-              <h2 class="font-weight-light subtitle-1 mt-2">Los conjuntos de datos de voz en español no son abundantes, y es aún más dificil obtenerlos separados por individuos, por eso te invitamos a grabar tu voz para apoyar nuestro proyecto.</h2>
+              <h2 class="font-weight-light subtitle-1 mt-2">
+                Los conjuntos de datos de voz en español no son abundantes, y es 
+                aún más dificil obtenerlos separados por individuos, por eso te 
+                invitamos a grabar tu voz para apoyar nuestro proyecto.
+              </h2>
             </div>  
           </v-card>
         </v-col>
@@ -50,7 +59,11 @@
           <v-card dark class="blue-light pa-3 d-flex flex-column" height="100%">
             <div class="my-auto">
               <h1 class="display-2 text-center">Apoya</h1>
-              <h2 class="font-weight-light subtitle-1 mt-2">La realización de proyectos como este, ayudan al desarrollo de soluciones para público hispano, que permitan brindar una mejor experiencia a todos estos usuarios.</h2>
+              <h2 class="font-weight-light subtitle-1 mt-2">
+                La realización de proyectos como este, ayudan al desarrollo de 
+                soluciones con inteligencia artificial enfocadas en público hispano.
+                Estas permitirán brindar una mejor experiencia de usuario en español.
+              </h2>
             </div>
           </v-card>
         </v-col>
