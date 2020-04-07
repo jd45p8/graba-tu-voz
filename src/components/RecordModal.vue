@@ -11,14 +11,14 @@
         <audio-player ref="recorderPlayer" v-if="audioSrc" class="px-7" :src="audioSrc"></audio-player>
 
         <v-btn
-          :class="{'blue-dark':!recording, 'red':recording}"
+          :class="{'blue-dark':!recording, 'red':recording, 'white--text': true}"
           v-else
-          dark
           fab
           depressed
           x-large
           class="mx-auto"
           @click="startRecording"
+          :loading="stopping"
         >
           <v-icon>{{recording? 'mdi-stop':'mdi-microphone'}}</v-icon>
         </v-btn>
@@ -56,6 +56,7 @@ export default {
     return {
       recording: false,
       shouldStop: false,
+      stopping: false,
       audioSrc: "",
       audioBlob: null,
       uploading: false,
@@ -70,6 +71,7 @@ export default {
       this.$emit("update:show", false);
       this.recording = false;
       this.shouldStop = false;
+      this.stopping = false;
       this.audioSrc = "";
     },
     startRecording: async function() {
@@ -82,8 +84,12 @@ export default {
           sampleRate: 44100,
           numberOfAudioChannels: 1,
           disableLogs: true,
-          ondataavailable: e => {
-            if (this.shouldStop) {
+          ondataavailable: async e => {
+            if (this.shouldStop && !this.stopping) {
+              this.stopping = true;
+              await new Promise((resolve, reject) => {
+                setTimeout(resolve, 1000);
+              });
               recorder.stopRecording(blobUrl => {
                 this.audioBlob = recorder.getBlob();
                 this.audioSrc = blobUrl;
@@ -91,6 +97,7 @@ export default {
               });
               this.recording = false;
               this.shouldStop = false;
+              this.stopping = false;
             }
           }
         });
