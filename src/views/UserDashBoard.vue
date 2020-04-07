@@ -57,7 +57,7 @@
                   >
                     <v-row no-gutters align="center" class="pl-3">
                       <v-col cols="auto">
-                        <span class="dark-text subtitle-2 font-weight-regular">{{key}}</span>
+                        <span class="dark-text subtitle-2 font-weight-regular">{{key + 1}}</span>
                       </v-col>
                       <v-col>
                         <audio-player

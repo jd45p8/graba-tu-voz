@@ -16,6 +16,19 @@ const routes = [
     }
   },
   {
+    path: '/support',
+    name: 'SuppoRT',
+    meta: {
+      shownName: 'Soporte'
+    },
+    beforeEnter: function(to, from, next) {
+      window.open(window['URL_SUPPORT'], '_blank');
+      if (!from.name) {
+        router.push('/');
+      }
+    }
+  },
+  {
     path: "/join",
     name: "Join",
     component: () => import("../views/Join.vue"),
