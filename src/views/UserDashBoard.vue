@@ -30,7 +30,7 @@
                   </template>
 
                   <template v-slot="{ open }">
-                    <v-row class="dark-text">
+                    <v-row align="center" class="dark-text">
                       <v-col
                         :cols="recordingsCount == 0 && !open ? 'auto' : ''"
                       >Frase {{phrase.text}}</v-col>
