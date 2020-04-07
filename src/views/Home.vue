@@ -2,7 +2,7 @@
   <div class="home">
     <v-img
       alt="Graba tu voz logo"
-      src="../assets/logo-colorfull.png"
+      src="../assets/logo.png"
       class="align-center d-flex"
       contain
       max-height="200"
