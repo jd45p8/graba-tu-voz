@@ -41,8 +41,9 @@
                 label="Fecha de nacimiento"
                 :min="minBirthdate"
                 :max="maxBirthdate"
+                :rules="[rules.required]"
               />
-              <v-select label="Género" v-model="form.gender" outlined :items="gendersList"></v-select>
+              <v-select :rules="[rules.required]" label="Género" v-model="form.gender" outlined :items="gendersList"></v-select>
               <v-switch v-model="form.contact" class="ml-3 mt-0" inset>
                 <template v-slot:label>
                   <span class="dark-text">
@@ -64,7 +65,7 @@
                 v-model="form.state"
                 type="state"
                 :rules="[rules.required]"
-                label="Estado"
+                label="Estado/departamento"
                 outlined
               ></v-text-field>
               <v-text-field
@@ -72,7 +73,7 @@
                 v-model="form.province"
                 type="province"
                 :rules="[rules.required]"
-                label="Provincia"
+                label="Provincia/ciudad"
                 outlined
               ></v-text-field>
             </div>

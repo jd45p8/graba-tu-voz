@@ -9,6 +9,7 @@
         @input="updateDate"
         readonly
         class="pt-1"
+        :rules="rules"
       ></v-text-field>
     </template>
     <v-date-picker v-model="tempDate" locale="ES" :min="min" :max="max"  show-current="false" scrollable full-width>
@@ -50,6 +51,9 @@ export default {
     },
     max: {
       type: String
+    },
+    rules: {
+      type: Array
     }
   }
 }
