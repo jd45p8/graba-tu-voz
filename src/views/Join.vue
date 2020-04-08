@@ -42,7 +42,7 @@
                 :min="minBirthdate"
                 :max="maxBirthdate"
               />
-              <v-select label="Sexo" v-model="form.sex" outlined :items="sexsList"></v-select>
+              <v-select label="Género" v-model="form.gender" outlined :items="gendersList"></v-select>
               <v-switch v-model="form.contact" class="ml-3 mt-0" inset>
                 <template v-slot:label>
                   <span class="dark-text">
@@ -125,7 +125,7 @@ export default {
         email: "",
         password: "",
         birthdate: "",
-        sex: "",
+        gender: "",
         country: "",
         state: "",
         province: "",
@@ -133,9 +133,10 @@ export default {
       },
       password2: "",
       step: 1,
-      sexsList: [
-        'Masculino',
-        'Femenino'
+      gendersList: [
+        'Hombre',
+        'Mujer',
+        'Otro'
       ],
       minBirthdate: moment().subtract(90, 'years').toISOString(),
       maxBirthdate: moment().subtract(3, 'years').toISOString(),
@@ -191,7 +192,7 @@ export default {
         return false;
       }
 
-      return this.form.sex != "";
+      return this.form.gender != "";
     },
     nextStep: async function() {
       switch (this.step) {
@@ -221,7 +222,7 @@ export default {
                 email: form.email,
                 password: form.password,
                 birthdate: form.birthdate,
-                sex: form.sex,
+                gender: form.gender,
                 contact: form.contact,
               };
             }

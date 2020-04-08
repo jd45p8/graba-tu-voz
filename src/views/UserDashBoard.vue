@@ -33,7 +33,7 @@
                     <v-row align="center" class="dark-text">
                       <v-col
                         :cols="recordingsCount == 0 && !open ? 'auto' : ''"
-                      >Frase {{phrase.text}}</v-col>
+                      >Frase: {{phrase.text}}</v-col>
 
                       <v-col
                         v-if="recordingsCount == 0 && !open"
