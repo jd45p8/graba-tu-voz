@@ -4,7 +4,7 @@
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="5">
         <v-stepper class="elevation-0" v-model="step" vertical>
-          <v-stepper-step :complete="step > 1" color="blue-dark" step="1">Credenciales</v-stepper-step>
+          <v-stepper-step :complete="step > 1" step="1">Credenciales</v-stepper-step>
           <v-stepper-content step="1">
             <div class="mb-2 pt-1">
               <v-text-field
@@ -29,19 +29,28 @@
                 outlined
               ></v-text-field>
             </div>
-            <v-btn @click="nextStep" color="blue-dark" class="mb-1" depressed dark>Continuar</v-btn>
+            <v-btn @click="nextStep" color="primary" class="mb-1" depressed dark>Continuar</v-btn>
           </v-stepper-content>
 
-          <v-stepper-step :complete="step > 2" step="2">Participar en demostración</v-stepper-step>
+          <v-stepper-step :complete="step > 2" step="2">Información demográfica</v-stepper-step>
 
           <v-stepper-content step="2">
             <div class="mb-2">
-              <v-switch
-                v-model="form.contact"
-                class="mx-3"
-                inset
-                label="¿Estaría dispuesto a participar en una demostración de los proyectos que se desarrollen a partir de este conjunto de datos?"
-              ></v-switch>
+              <date-component
+                :date.sync="form.birthdate"
+                label="Fecha de nacimiento"
+                :min="minBirthdate"
+                :max="maxBirthdate"
+              />
+              <v-select label="Sexo" v-model="form.sex" outlined :items="sexsList"></v-select>
+              <v-switch v-model="form.contact" class="ml-3 mt-0" inset>
+                <template v-slot:label>
+                  <span class="dark-text">
+                    ¿Estaría dispuesto a participar en una demostración de
+                    los proyectos que se desarrollen a partir de este conjunto de datos?
+                  </span>
+                </template>
+              </v-switch>
               <v-text-field
                 v-if="form.contact"
                 v-model="form.country"
@@ -67,8 +76,8 @@
                 outlined
               ></v-text-field>
             </div>
-            <v-btn @click="step = 1" text>Anterior</v-btn>
-            <v-btn @click="nextStep" color="blue-dark" class="mb-1 ml-2" depressed dark>Continuar</v-btn>            
+            <v-btn class="dark-text" @click="step = 1" text>Anterior</v-btn>
+            <v-btn @click="nextStep" color="primary" class="mb-1 ml-2" depressed dark>Continuar</v-btn>
           </v-stepper-content>
           <v-stepper-step :complete="step > 2" step="3">Política de datos</v-stepper-step>
 
@@ -76,18 +85,18 @@
             <div class="mb-5">
               <p>
                 Presionando el botón aceptar, a continuación, finalizará su registro
-                y acepta que usemos la información que suministre en esta plataforma 
+                y acepta que usemos la información que suministre en esta plataforma
                 con el fin de entrenar el o los modelos que sean necesarios. Asimismo,
                 no se usará su información sensible con fines distintos a los descritos
                 anteriormente y en caso de ser necesario, intentaremos contactarlo si
                 seleccionó que desea participar en la demostración.
               </p>
             </div>
-            <v-btn @click="step = 2" text>Anterior</v-btn>
+            <v-btn class="dark-text" @click="step = 2" text>Anterior</v-btn>
             <v-btn
               @click="nextStep"
               :loading="sending"
-              color="blue-dark"
+              color="primary"
               class="mb-1 ml-2"
               depressed
               dark
@@ -100,8 +109,12 @@
 </template>
 
 <script>
-const axios = require("axios");
+import DateComponent from "../components/DateComponent.vue";
 import { notificationBus } from "../main";
+
+const moment = require('moment');
+moment.suppressDeprecationWarnings = true;
+const axios = require("axios");
 
 export default {
   name: "Join",
@@ -111,6 +124,8 @@ export default {
       form: {
         email: "",
         password: "",
+        birthdate: "",
+        sex: "",
         country: "",
         state: "",
         province: "",
@@ -118,6 +133,12 @@ export default {
       },
       password2: "",
       step: 1,
+      sexsList: [
+        'Masculino',
+        'Femenino'
+      ],
+      minBirthdate: moment().subtract(90, 'years').toISOString(),
+      maxBirthdate: moment().subtract(3, 'years').toISOString(),
       rules: {
         required: value => !!value || "Requerido",
         counter: value => {
@@ -157,6 +178,21 @@ export default {
           this.form.province.length > 0)
       );
     },
+    verifyDemographicInformation() {
+      let date;
+      try {
+        date = moment(this.form.birthdate);
+      } catch (error) {
+        return false;
+      }
+
+      if (!date.isValid()) return false;
+      if (!date.isAfter(this.minBirthdate) || !date.isBefore(this.maxBirthdate)){
+        return false;
+      }
+
+      return this.form.sex != "";
+    },
     nextStep: async function() {
       switch (this.step) {
         case 1:
@@ -168,10 +204,13 @@ export default {
           break;
 
         case 2:
-          if (this.verifyContactInformacion()) {
-            return (this.step += 1);
+          if (!this.verifyContactInformacion()) {
+            return notificationBus.$emit("WARNING", "Debes llenar todos los campos.");
           }
-          notificationBus.$emit("WARNING", "Debes llenar todos los campos.");
+          if (!this.verifyDemographicInformation()){
+            return notificationBus.$emit("WARNING", "Verifica la información ingresada.");
+          }
+          this.step += 1;
           break;
 
         default:
@@ -181,7 +220,9 @@ export default {
               form = {
                 email: form.email,
                 password: form.password,
-                contact: form.contact
+                birthdate: form.birthdate,
+                sex: form.sex,
+                contact: form.contact,
               };
             }
             this.sending = true;
@@ -202,6 +243,9 @@ export default {
           }
       }
     }
+  },
+  components: {
+    DateComponent
   }
 };
 </script>

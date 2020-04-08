@@ -26,7 +26,7 @@
                   :disable-icon-rotate="phrase.recordings.length >= phrase.maxRecordings"
                 >
                   <template v-slot:actions v-if="phrase.recordings.length >= phrase.maxRecordings">
-                    <v-icon class="green-light-text">mdi-check</v-icon>
+                    <v-icon class="success--text">mdi-check</v-icon>
                   </template>
 
                   <template v-slot="{ open }">
@@ -43,7 +43,7 @@
                       <v-col
                         v-if="phrase.recordings.length < phrase.maxRecordings"
                         cols="auto"
-                        class="blue-dark-text"
+                        class="primary--text"
                       >{{phrase.recordings.length}}/{{phrase.maxRecordings}}</v-col>
                     </v-row>
                   </template>
@@ -84,7 +84,7 @@
                   <v-row v-if="phrase.recordings.length < phrase.maxRecordings" justify="center">
                     <v-btn
                       @click="openRecordModal(phrase.text)"
-                      color="blue-dark"
+                      color="primary"
                       dark
                       fab
                       depressed

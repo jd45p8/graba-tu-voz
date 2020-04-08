@@ -2,9 +2,9 @@
   <v-col class="login d-flex justify-center">
     <v-row align="center" justify="center">
       <v-col cols="12" sm="6" md="4" lg="3">
-        <v-card depressed outlined :loading="logginIn">
+        <v-card outlined :loading="logginIn">
           <template slot="progress">
-            <v-progress-linear indeterminate color="blue-dark"></v-progress-linear>
+            <v-progress-linear indeterminate color="primary"></v-progress-linear>
           </template>
           <div class="mx-6 my-7">
             <h1 class="dark-text text-center header font-weight-light mb-7">Iniciar sesión</h1>
@@ -23,9 +23,9 @@
               outlined
             ></v-text-field>
             <v-row justify="center" class="mt-3">
-              <v-btn class="blue-dark-text" text to="/join">Registrarse</v-btn>
+              <v-btn class="primary--text" text to="/join">Registrarse</v-btn>
               <v-btn
-                color="blue-dark"
+                color="primary"
                 class="ml-2"
                 :dark="!logginIn"
                 depressed

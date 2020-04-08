@@ -3,9 +3,8 @@
     <v-slider
       v-model="sliderPosition"
       hide-details
-      class="align-center blue-dark-text"
+      class="align-center"
       track-color="gray"
-      color="blue-dark"
       :max="maxSlider"
       @change="updatePlayerCurrentTime"
       @start="player.pause()"

@@ -3,7 +3,7 @@
     <v-dialog :value="show" persistent max-width="400px">
       <v-card :loading="uploading" class="d-flex flex-column">
         <template slot="progress">
-          <v-progress-linear indeterminate color="blue-dark"></v-progress-linear>
+          <v-progress-linear indeterminate color="primary"></v-progress-linear>
         </template>
         <v-card-title class="headline">Grabar</v-card-title>
         <v-card-text class="subtitle-1">Debes grabar tu voz diciendo: "{{text}}"</v-card-text>
@@ -11,12 +11,12 @@
         <audio-player ref="recorderPlayer" v-if="audioSrc" class="px-7" :src="audioSrc"></audio-player>
 
         <v-btn
-          :class="{'blue-dark':!recording, 'red':recording, 'white--text': true}"
+          :color="recording ? 'red' : 'primary'"
           v-else
           fab
           depressed
           x-large
-          class="mx-auto"
+          class="mx-auto white--text"
           @click="startRecording"
           :loading="stopping"
         >
@@ -32,7 +32,7 @@
             :disabled="recording || uploading"
           >Cancelar</v-btn>
           <v-btn
-            class="blue-dark-text mr-2"
+            class="primary--text mr-2"
             text
             @click="uploadAudio"
             :disabled="!audioSrc || uploading"

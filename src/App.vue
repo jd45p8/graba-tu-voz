@@ -21,7 +21,7 @@
         <v-subheader>
           <h1 class="title dark-text">Graba tu voz</h1>
         </v-subheader>
-        <v-list-item-group class="blue-dark-text">
+        <v-list-item-group class="primary--text">
           <v-list-item v-for="link in links" :key="links.indexOf(link)" :to="link.route">
             <v-list-item-content>
               <v-list-item-title>{{link.shownName}}</v-list-item-title>
@@ -102,32 +102,8 @@ $color-dark: #000000d4;
   color: $color-dark !important;
 }
 
-.blue-dark-text {
-  color: $color-blue-dark !important;
-}
-
-.blue-light-text {
-  color: $color-blue-light !important;
-}
-
-.green-light-text {
-  color: $color-green-light !important;
-}
-
 .dark {
   background-color: $color-dark !important;
-}
-
-.blue-dark {
-  background-color: $color-blue-dark !important;
-}
-
-.blue-light {
-  background-color: $color-blue-light !important;
-}
-
-.green-light {
-  background-color: $color-green-light !important;
 }
 
 .dark-link {

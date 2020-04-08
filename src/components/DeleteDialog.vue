@@ -2,7 +2,7 @@
   <v-dialog :value="show" persistent class="deletedialog" max-width="400px">
     <v-card :loading="deleting">
       <template slot="scope">
-        <v-progress-linear indeterminate color="blue-dark"></v-progress-linear>
+        <v-progress-linear indeterminate color="primary"></v-progress-linear>
       </template>
       <v-card-title class="headline">Eliminar</v-card-title>
       <v-card-text
@@ -10,7 +10,7 @@
       >¿Desea eliminar la pista {{recording_key}} de la frase {{phrase.text}}?</v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn class="blue-dark-text ml-2" @click="close" :disabled="deleting" text>Cancelar</v-btn>
+        <v-btn class="primary--text ml-2" @click="close" :disabled="deleting" text>Cancelar</v-btn>
         <v-btn class="dark-text" @click="deleteRecording" :disabled="deleting" text>Eliminar</v-btn>
       </v-card-actions>
     </v-card>
