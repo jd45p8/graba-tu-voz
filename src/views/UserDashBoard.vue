@@ -134,6 +134,7 @@ export default {
           recordings: []
         }
       ],
+      phrasesIndexes: {},
       recordingsCount: 0
     };
   },
@@ -182,10 +183,10 @@ export default {
         });
 
         let phrases = response.data;
-        phrases.sort((a, b) => {
-          return a.text < b.text ? -1 : 1;
+        phrases.forEach((e, index) => {
+          e.recordings = []
+          this.phrasesIndexes[e.text] = index;
         });
-        phrases.forEach(e => e.recordings = []);
         this.phrases = phrases;
       } catch (error) {
         this.phrases = [];
@@ -202,10 +203,11 @@ export default {
           }
         });
 
+        let index = this.phrasesIndexes;
         let data = response.data;
         this.recordingsCount = data.length;
         data.sort((a, b) => {
-          return a.text < b.text ? -1 : 1;
+          return index[a.text] < index[b.text] ? -1 : 1;
         });
         let i = 0;
         let j = 0;
