@@ -38,12 +38,17 @@
             <div class="mb-2">
               <date-component
                 :date.sync="form.birthdate"
-                label="Fecha de nacimiento"
+                label="Fecha de nacimiento (opcional)"
                 :min="minBirthdate"
                 :max="maxBirthdate"
-                :rules="[rules.required]"
               />
-              <v-select :rules="[rules.required]" label="Género" v-model="form.gender" outlined :items="gendersList"></v-select>
+              <v-select
+                :rules="[rules.required]"
+                label="Género"
+                v-model="form.gender"
+                outlined
+                :items="gendersList"
+              ></v-select>
               <v-switch v-model="form.contact" class="ml-3 mt-0" inset>
                 <template v-slot:label>
                   <span class="dark-text">
@@ -181,16 +186,18 @@ export default {
       );
     },
     verifyDemographicInformation() {
-      let date;
-      try {
-        date = moment(this.form.birthdate);
-      } catch (error) {
-        return false;
-      }
+      if (this.form.birthdate) {
+        let date;
+        try {
+          date = moment(this.form.birthdate);
+        } catch (error) {
+          return false;
+        }
 
-      if (!date.isValid()) return false;
-      if (!date.isAfter(this.minBirthdate) || !date.isBefore(this.maxBirthdate)){
-        return false;
+        if (!date.isValid()) return false;
+        if (!date.isAfter(this.minBirthdate) || !date.isBefore(this.maxBirthdate)){
+          return false;
+        }
       }
 
       return this.form.gender != "";
@@ -216,6 +223,7 @@ export default {
           break;
 
         default:
+          this.sending = true;
           try {
             let form = this.form;
             if (!this.form.contact) {
@@ -227,10 +235,8 @@ export default {
                 contact: form.contact,
               };
             }
-            this.sending = true;
             let response = await axios.post(`${window["URL_API"]}/user`, form);
             notificationBus.$emit("SUCCESS", response.data.message);
-            this.sending = false;
             this.$router.push("login");
           } catch (error) {
             if (error.response) {
@@ -243,6 +249,7 @@ export default {
               notificationBus.$emit("ERROR", "Algo ha salido mal.");
             }
           }
+          this.sending = false;
       }
     }
   },

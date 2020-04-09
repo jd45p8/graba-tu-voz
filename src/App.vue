@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <v-app-bar app dense hide-on-scroll elevation="3" color="white">
+    <v-app-bar app dense elevation="3" color="white">
       <v-app-bar-nav-icon v-on:click="toggleMobileNav" class="d-flex d-md-none dark-text"></v-app-bar-nav-icon>
-      <h1 class="title dark-text">Graba tu voz</h1>
+      <v-toolbar-title class="title dark-text">Graba tu voz</v-toolbar-title>
 
       <v-spacer></v-spacer>
 

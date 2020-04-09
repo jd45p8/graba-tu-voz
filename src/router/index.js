@@ -43,7 +43,7 @@ const routes = [
     component: () => import("../views/Login.vue"),
     meta: {
       guest: true,
-      shownName: "Inciar sesión"
+      shownName: "Iniciar sesión"
     }
   },
   {
