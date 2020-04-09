@@ -107,24 +107,15 @@ export default {
       };
 
       if (!this.recording) {
-        var permision = await this.checkPermision();
-
-        if (permision != "denied") {
-          navigator.mediaDevices
-            .getUserMedia({ audio: true, video: false })
-            .then(handleSuccess)
-            .catch(e => {
-              notificationBus.$emit(
-                "ERROR",
-                "Al parecer no se pudo acceder al micrófono."
-              );
-            });
-        } else {
-          notificationBus.$emit(
-            "ERROR",
-            "Sin permiso para acceder al micrófono."
-          );
-        }
+        navigator.mediaDevices
+          .getUserMedia({ audio: true, video: false })
+          .then(handleSuccess)
+          .catch(e => {
+            notificationBus.$emit(
+              "ERROR",
+              "Al parecer no se pudo acceder al micrófono."
+            );
+          });
       } else if (!this.shouldStop) {
         this.shouldStop = true;
       }
