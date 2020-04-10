@@ -1,5 +1,6 @@
 module.exports = {
   lintOnSave: false,
+  productionSourceMap: false,
   transpileDependencies: ["vuetify"],
   chainWebpack: config => {
     config

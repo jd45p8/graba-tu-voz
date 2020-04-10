@@ -107,15 +107,22 @@ export default {
       };
 
       if (!this.recording) {
-        navigator.mediaDevices
-          .getUserMedia({ audio: true, video: false })
-          .then(handleSuccess)
-          .catch(e => {
-            notificationBus.$emit(
-              "ERROR",
-              "Al parecer no se pudo acceder al micrófono."
-            );
-          });
+        try {
+          navigator.mediaDevices
+            .getUserMedia({ audio: true, video: false })
+            .then(handleSuccess)
+            .catch(e => {
+              notificationBus.$emit(
+                "ERROR",
+                "Al parecer no se pudo acceder al micrófono."
+              );
+            });
+        } catch (error) {
+          notificationBus.$emit(
+            "ERROR",
+            "No se cuenta con acceso al micrófono."
+          );
+        }
       } else if (!this.shouldStop) {
         this.shouldStop = true;
       }
