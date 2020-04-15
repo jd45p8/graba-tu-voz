@@ -153,8 +153,8 @@ export default {
           return value.length <= 50 || "Maximo 50 caracteres";
         },
         email: value => {
-          const pattern = /^[\w-\.]+$/;
-          return pattern.test(value) || "Correo inválido";
+          const pattern = /^[\w-\.]{6,30}$/;
+          return pattern.test(value) || "Debe contener entre 6 y 30 caracteres alfanuméricos";
         },
         min: value => {
           return value.length >= 8 || "8 caracteres mínimo";
