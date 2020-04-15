@@ -12,6 +12,7 @@
                 :rules="[rules.required, rules.counter, rules.email]"
                 label="Correo electrónico"
                 type="email"
+                suffix="@uninorte.edu.co"
                 outlined
               ></v-text-field>
               <v-text-field
@@ -152,7 +153,7 @@ export default {
           return value.length <= 50 || "Maximo 50 caracteres";
         },
         email: value => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          const pattern = /^[\w-\.]+$/;
           return pattern.test(value) || "Correo inválido";
         },
         min: value => {
@@ -235,6 +236,7 @@ export default {
                 contact: form.contact,
               };
             }
+            form.email += "@uninorte.edu.co";
             let response = await axios.post(`${window["URL_API"]}/user`, form);
             notificationBus.$emit("SUCCESS", response.data.message);
             this.$router.push("login");
