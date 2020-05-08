@@ -21,7 +21,7 @@ const routes = [
     meta: {
       shownName: 'Soporte'
     },
-    beforeEnter: function(to, from, next) {
+    beforeEnter: function (to, from, next) {
       window.open(window['URL_SUPPORT'], '_blank');
       if (!from.name) {
         router.push('/');
@@ -53,6 +53,14 @@ const routes = [
     meta: {
       requiresAuth: true,
       shownName: "Grabaciones"
+    }
+  }, {
+    path: "/settings",
+    name: "Settings",
+    component: () => import("../views/Settings.vue"),
+    meta: {
+      requiresAuth: true,
+      shownName: "Ajustes"
     }
   }, {
     path: "/logout",
