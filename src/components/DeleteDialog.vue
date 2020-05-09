@@ -7,7 +7,7 @@
       <v-card-title class="headline">Eliminar</v-card-title>
       <v-card-text
         class="subtitle-1"
-      >¿Desea eliminar la pista {{recording_key}} de la frase "{{phrase.text}}"?</v-card-text>
+      >¿Desea eliminar la pista {{recording_key + 1}} de la frase "{{phrase.text}}"?</v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn class="primary--text ml-2" @click="close" :disabled="deleting" text>Cancelar</v-btn>
