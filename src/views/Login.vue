@@ -57,7 +57,7 @@ export default {
           return value.length <= 50 || "Maximo 50 caracteres";
         },
         email: value => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          const pattern = /^[\w-\.]{5,30}@uninorte.edu.co$/;
           return pattern.test(value) || "Correo inválido";
         },
         min: value => {
