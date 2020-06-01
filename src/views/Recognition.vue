@@ -7,11 +7,11 @@
             <template slot="progress">
               <v-progress-linear indeterminate color="primary"></v-progress-linear>
             </template>
-            <v-card-title class="headline">Reconocimiento del hablante</v-card-title>
+            <v-card-title class="headline">Reconocimiento</v-card-title>
             <v-card-text
               class="subtitle-1"
               v-if="!recording"
-            >Grabe su voz diciendo cuando se indique los dígitos de su PIN</v-card-text>
+            >Grabe su voz cuando se indique diciendo los dígitos de su PIN</v-card-text>
             <v-card-text class="subtitle-1" v-else>
               Diga el
               <span class="title primary--text">{{recordingStep}}</span> dígito
