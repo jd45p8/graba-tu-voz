@@ -54,6 +54,15 @@ const routes = [
       requiresAuth: true,
       shownName: "Grabaciones"
     }
+  },{
+    path: "/recognition",
+    name: "Recognition",
+    component: () => import("../views/Recognition"),
+    meta: {
+      requiresAuth: true,
+      requiresAdmin: true,
+      shownName: "Reconocimineto"
+    }
   }, {
     path: "/settings",
     name: "Settings",
@@ -93,6 +102,7 @@ const routes = [
 
       localStorage.removeItem("token");
       localStorage.removeItem("email");
+      localStorage.removeItem("admin");
       router.go("login");
     }
   },
@@ -122,6 +132,14 @@ router.beforeEach((to, from, next) => {
     if (!localStorage.token) {
       return next({
         name: "Login"
+      });
+    }
+  }
+
+  if (to.matched.some(r => r.meta.requiresAdmin)) {
+    if (!localStorage.admin) {
+      return next({
+        name: "UserDashBoard"
       });
     }
   }

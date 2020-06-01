@@ -65,10 +65,12 @@ export default {
       if (localStorage.token) {
         this.$router.options.routes.forEach(r => {
           if (r.meta && (r.meta.requiresAuth || !r.meta.guest)) {
-            this.links.push({
-              shownName: r.meta.shownName,
-              route: r.path
-            });
+            if (!r.meta.requiresAdmin || localStorage.admin) {
+              this.links.push({
+                shownName: r.meta.shownName,
+                route: r.path
+              });
+            }
           }
         });
       } else {

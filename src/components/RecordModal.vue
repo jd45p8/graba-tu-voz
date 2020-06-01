@@ -158,14 +158,6 @@ export default {
       }
       this.closeModal();
       this.uploading = false;
-    },
-    checkPermision: function() {
-      const self = this;
-      return new Promise((resolve, reject) => {
-        navigator.permissions.query({ name: "microphone" }).then(result => {
-          resolve(result.state);
-        });
-      });
     }
   },
   props: {

@@ -153,6 +153,7 @@ export default {
     authenticationError(error) {
       localStorage.removeItem("token");
       localStorage.removeItem("email");
+      localStorage.removeItem("admin");
       this.$emit("UPDATENAV");
       this.$router.push("login");
       notificationBus.$emit("WARNING", error.response.data.message);

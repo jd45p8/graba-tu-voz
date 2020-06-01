@@ -32,7 +32,7 @@
       <!-- Fila con el porqué deben apoyarnos -->
       <v-row justify="center" class="mx-md-4 mx-lg-8 mx-xl-12">
         <v-col cols="12" sm="6" md="4" class="flex-wrap">
-          <v-card dark color="primary" class="pa-3 d-flex flex-column" height="100%">
+          <v-card dark color="primary" class="pa-4 d-flex flex-column" height="100%">
             <div class="my-auto">
               <h1 class="display-2 text-center">Únete</h1>
               <h2 class="font-weight-light subtitle-1 mt-2">
@@ -44,7 +44,7 @@
           </v-card>
         </v-col>
         <v-col cols="12" sm="6" md="4" class="flex-wrap">
-          <v-card dark color="success" class="pa-3 d-flex flex-column" height="100%">
+          <v-card dark color="success" class="pa-4 d-flex flex-column" height="100%">
             <div class="my-auto">
               <h1 class="display-2 text-center">Graba</h1>
               <h2 class="font-weight-light subtitle-1 mt-2">
@@ -56,7 +56,7 @@
           </v-card>
         </v-col>
         <v-col cols="12" sm="6" md="4" class="flex-wrap">
-          <v-card dark class="secondary pa-3 d-flex flex-column" height="100%">
+          <v-card dark class="secondary pa-4 d-flex flex-column" height="100%">
             <div class="my-auto">
               <h1 class="display-2 text-center">Apoya</h1>
               <h2 class="font-weight-light subtitle-1 mt-2">

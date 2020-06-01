@@ -93,6 +93,7 @@ export default {
         });
         localStorage.token = response.data.token;
         localStorage.email = this.email;
+        localStorage.admin = this.admin;
         this.$emit("UPDATENAV");
         this.$router.push("userdashboard");
       } catch (error) {
