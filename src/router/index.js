@@ -61,7 +61,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       requiresAdmin: true,
-      shownName: "Reconocimineto"
+      shownName: "Reconocimiento"
     }
   }, {
     path: "/settings",
