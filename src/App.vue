@@ -38,8 +38,10 @@
     </v-content>
     <v-footer color="white" class="justify-center">
       <p>
-        Desarrollado por José Polo
-        <a href="https://www.github.com/jd45p8">@jd45p8</a>
+        Desarrollado por
+        <a href="https://www.github.com/jd45p8">@jd45p8</a>,
+        <a href="https://www.github.com/cvillad">@cvillad</a> &
+        <a href="https://www.github.com/krthr">@krthr</a>
       </p>
     </v-footer>
   </v-app>
